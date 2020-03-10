@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/easyqrcodejs@3.5.0/dist/easy.qrcode.min.js"></script>
+    <script>
+      function createNewKey() {
+        const length = 64;
+        let result = "";
+        const characters =
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const charactersLength = characters.length;
+        for (let i = 0; i < length; i++) {
+          result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+          );
+        }
+        return result;
+      }
+    </script>
+  </head>
+  <body>
+    <div id="qr-code"></div>
+    <input type="text" readonly autofocus id="key" />
+
+    <button id="get-new-key-button">Generate</button>
+
+    <script>
+      function drawQRCode(key) {
+        const URL_BASE = "https://www.maavarim.org/club/?key=";
+        new QRCode(document.getElementById("qr-code"), {
+          text: URL_BASE + key
+        });
+      }
+
+      function displayNewKey() {
+        const key = createNewKey();
+        drawQRCode(key);
+        document.getElementById("key").value = key;
+      }
+
+      document
+        .getElementById("get-new-key-button")
+        .addEventListener("click", displayNewKey);
+    </script>
+  </body>
+</html>
