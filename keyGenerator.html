@@ -29,7 +29,7 @@
 
     <script>
       function drawQRCode(key) {
-        const URL_BASE = "https://www.maavarim.org/club/?key=";
+        const URL_BASE = "http://maavarim.github.io/?key=";
         new QRCode(document.getElementById("qr-code"), {
           text: URL_BASE + key
         });

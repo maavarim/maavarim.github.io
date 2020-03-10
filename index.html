@@ -20,18 +20,50 @@
     </script>
   </head>
   <body>
-    <div id="key">Key is:</div>
     <div id="subscription">Loading...</div>
     <script>
-      document.getElementById("key").innerHTML = "Key is " + key;
+      function updateActiveSubscription(name) {
+        document.getElementById(
+          "subscription"
+        ).innerText = `רישום בתוקף עבור ${name}.`;
+      }
+
+      function updateInactiveSubscription() {
+        document.getElementById(
+          "subscription"
+        ).innerText = `הרישום אינו בתוקף. אנא חדשו אותו :)`;
+      }
+
+      function updateNoSubscription() {
+        document.getElementById(
+          "subscription"
+        ).innerText = `לא נמצא רישום מתאים. אנא פנו לתמיכה`;
+      }
+
+      function updateError() {
+        document.getElementById(
+          "subscription"
+        ).innerText = `חלה שגיאה בבדיקת המינוי, אנא נסו שנית`;
+      }
 
       const status = db
-        .collection("member")
+        .collection("members")
+        .doc(key)
         .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            console.log(`${doc.id} => ${doc.data()}`);
-          });
+        .then(doc => {
+          if (doc.exists) {
+            const { name, isActive } = doc.data();
+            if (isActive) {
+              updateActiveSubscription(name);
+            } else {
+              updateInactiveSubscription();
+            }
+          } else {
+            updateNoSubscription();
+          }
+        })
+        .catch(error => {
+          updateError();
         });
     </script>
   </body>
