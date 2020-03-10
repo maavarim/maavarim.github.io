@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>מועדון חבריםות - הוספת משתמש.ת</title>
+    <title>מועדון חבריםות - ביטול רישום משתמש.ת</title>
     <script src="https://cdn.jsdelivr.net/npm/easyqrcodejs@3.5.0/dist/easy.qrcode.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-auth.js"></script>
@@ -26,31 +26,24 @@
   <body>
     <div id="auth-container">
       <button id="auth-button">התחברות</button>
-      <div id="auth-error" style="display: none;">יש להתחבר עם חשבון המערכת.</div>
+      <div id="auth-error" style="display: none;">
+        יש להתחבר עם חשבון המערכת.
+      </div>
     </div>
 
     <div id="panel" style="display: none;">
       <input type="text" id="name" placeholder="שם" />
-      <button id="get-new-key-button">יצירת מפתח מועדון חדש</button>
+      <button id="cancel-button">חיפוש</button>
 
-      <div id="key-container" style="display: none;">
-        <div id="qr-code"></div>
-        <input type="text" readonly autofocus id="key" />
-        <div>
-          המפתח הועתק.<br />
-          <a class="button" id="download">הורדת QRcode</a>
-        </div>
-      </div>
+      <div id="result"></div>
     </div>
 
     <script>
-      document
-        .getElementById("auth-button")
-        .addEventListener("click", auth);
+      document.getElementById("auth-button").addEventListener("click", auth);
 
-        document
-        .getElementById("get-new-key-button")
-        .addEventListener("click", displayNewKey);
+      document
+        .getElementById("cancel-button")
+        .addEventListener("click", cancel);
     </script>
   </body>
 </html>

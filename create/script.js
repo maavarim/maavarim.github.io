@@ -25,6 +25,10 @@ function updateDownloadButton() {
   downloadButton.setAttribute("download", "qr-code.jpg");
 }
 
+function showEmptyNameError() {
+  alert("אנא הזינו שם.");
+}
+
 function displayNewKey() {
   const name = document.getElementById("name").value;
   if (!name) {
