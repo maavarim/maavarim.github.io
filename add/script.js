@@ -48,12 +48,8 @@ function displayNewKey() {
     });
 
   drawQRCode(key);
-  document.getElementById("key").value = key;
   setTimeout(() => updateDownloadButton(), 0);
   document.getElementById("key-container").style.display = "flex";
-
-  document.getElementById("key").select();
-  document.execCommand("copy");
 }
 
 var firebaseConfig = {

@@ -30,13 +30,6 @@ input[type="text"] {
   font-family: "Assistant";
   padding: 0.5em 1em;
 }
-#key {
-  padding: 0.25em 1em;
-  direction: ltr;
-  height: 3em;
-  font-family: monospace;
-  margin-bottom: 1rem;
-}
 button,
 .button {
   cursor: pointer;
