@@ -23,11 +23,12 @@ function drawQRCode(key) {
   });
 }
 
-function updateDownloadButton() {
+function downloadQRCode() {
   const data = document.getElementById("qr-code").children[1].src;
-  const downloadButton = document.getElementById("download");
-  downloadButton.setAttribute("href", data);
-  downloadButton.setAttribute("download", "qr-code.jpg");
+  const downloadLink = document.createElement("a");
+  downloadLink.href = data;
+  downloadLink.download = "qr-code.jpg";
+  downloadLink.click();
 }
 
 function showEmptyNameError() {
@@ -53,7 +54,6 @@ function displayNewKey() {
     });
 
   drawQRCode(key);
-  setTimeout(() => updateDownloadButton(), 100);
   document.getElementById("key-container").style.display = "flex";
 }
 

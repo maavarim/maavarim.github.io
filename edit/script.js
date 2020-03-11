@@ -62,7 +62,7 @@ function addRow(table, key, name, registarationDate, isActive) {
       var newTab = window.open();
       newTab.document.body.innerHTML = `<div dir="rtl"><img src="${data}" width="265px" height="265px"><br/><br/><a href="${data}" download="qr-code.jpg">הורדה</a></div>`;
       tmpQRContainer.remove();
-    }, 100);
+    }, 200);
   }
 
   const openQRCodeCell = document.createElement("td");

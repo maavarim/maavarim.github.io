@@ -26,7 +26,9 @@
   <body>
     <div id="auth-container">
       <button id="auth-button">התחברות</button>
-      <div id="auth-error" style="display: none;">יש להתחבר עם חשבון המערכת.</div>
+      <div id="auth-error" style="display: none;">
+        יש להתחבר עם חשבון המערכת.
+      </div>
     </div>
 
     <div id="panel" style="display: none;">
@@ -42,13 +44,15 @@
     </div>
 
     <script>
-      document
-        .getElementById("auth-button")
-        .addEventListener("click", auth);
+      document.getElementById("auth-button").addEventListener("click", auth);
 
-        document
+      document
         .getElementById("get-new-key-button")
         .addEventListener("click", displayNewKey);
+        
+      document
+        .getElementById("download")
+        .addEventListener("click", downloadQRCode);
     </script>
   </body>
 </html>
