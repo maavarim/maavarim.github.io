@@ -23,7 +23,7 @@ function addRow(table, key, name, registarationDate, isActive) {
   row.appendChild(registarationDateCell);
 
   const isActiveCell = document.createElement("td");
-  isActiveCell.innerText = isActive ? "פעיל" : "לא פעיל";
+  isActiveCell.innerText = isActive ? "פעילה" : "לא פעילה";
   row.appendChild(isActiveCell);
 
   function toggleSubscription(key) {
