@@ -14,7 +14,12 @@ function drawQRCode(key) {
   const URL_BASE = "http://maavarim.github.io/?key=";
   document.getElementById("qr-code").innerHTML = "";
   new QRCode(document.getElementById("qr-code"), {
-    text: URL_BASE + key
+    text: URL_BASE + key,
+    backgroundImage: '../logo.jpg',
+    autoColor: true,
+    backgroundImageAlpha: .75,
+    dotScale: .5,
+    quietZone: 12
   });
 }
 
@@ -48,7 +53,7 @@ function displayNewKey() {
     });
 
   drawQRCode(key);
-  setTimeout(() => updateDownloadButton(), 0);
+  setTimeout(() => updateDownloadButton(), 100);
   document.getElementById("key-container").style.display = "flex";
 }
 

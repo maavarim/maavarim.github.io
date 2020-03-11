@@ -50,14 +50,19 @@ function addRow(table, key, name, registarationDate, isActive) {
     const tmpQRContainer = document.createElement("div");
     const URL_BASE = "http://maavarim.github.io/?key=";
     new QRCode(tmpQRContainer, {
-      text: URL_BASE + key
+      text: URL_BASE + key,
+      backgroundImage: "../logo.jpg",
+      autoColor: true,
+      backgroundImageAlpha: 0.75,
+      dotScale: 0.5,
+      quietZone: 12
     });
     setTimeout(() => {
       const data = tmpQRContainer.children[1].src;
       var newTab = window.open();
       newTab.document.body.innerHTML = `<div dir="rtl"><img src="${data}" width="265px" height="265px"><br/><br/><a href="${data}" download="qr-code.jpg">הורדה</a></div>`;
       tmpQRContainer.remove();
-    });
+    }, 100);
   }
 
   const openQRCodeCell = document.createElement("td");
