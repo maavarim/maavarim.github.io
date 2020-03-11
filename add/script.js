@@ -43,7 +43,8 @@ function displayNewKey() {
     .doc(key)
     .set({
       name,
-      isActive: true
+      isActive: true,
+      createdAt: firebase.firestore.Timestamp.fromDate(new Date())
     });
 
   drawQRCode(key);

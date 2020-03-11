@@ -11,12 +11,16 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-function addRow(table, key, name, isActive) {
+function addRow(table, key, name, registarationDate, isActive) {
   const row = document.createElement("tr");
 
   const nameCell = document.createElement("td");
   nameCell.innerText = name;
   row.appendChild(nameCell);
+
+  const registarationDateCell = document.createElement("td");
+  registarationDateCell.innerText = registarationDate;
+  row.appendChild(registarationDateCell);
 
   const isActiveCell = document.createElement("td");
   isActiveCell.innerText = isActive ? "פעיל" : "לא פעיל";
@@ -42,6 +46,28 @@ function addRow(table, key, name, isActive) {
   toggleSubscriptionCell.appendChild(toggleSubscriptionLink);
   row.appendChild(toggleSubscriptionCell);
 
+  function openQRCode(key) {
+    const tmpQRContainer = document.createElement("div");
+    const URL_BASE = "http://maavarim.github.io/?key=";
+    new QRCode(tmpQRContainer, {
+      text: URL_BASE + key
+    });
+    setTimeout(() => {
+      const data = tmpQRContainer.children[1].src;
+      var newTab = window.open();
+      newTab.document.body.innerHTML = `<div dir="rtl"><img src="${data}" width="265px" height="265px"><br/><br/><a href="${data}" download="qr-code.jpg">הורדה</a></div>`;
+      tmpQRContainer.remove();
+    });
+  }
+
+  const openQRCodeCell = document.createElement("td");
+  const openQRCodeLink = document.createElement("a");
+  openQRCodeLink.innerText = "QR Code";
+  openQRCodeLink.href = "#";
+  openQRCodeLink.addEventListener("click", () => openQRCode(key));
+  openQRCodeCell.appendChild(openQRCodeLink);
+  row.appendChild(openQRCodeCell);
+
   table.appendChild(row);
 }
 
@@ -52,16 +78,36 @@ function createTable(container) {
   const nameCell = document.createElement("th");
   nameCell.innerText = "שם חבר.ת מועדון";
   row.appendChild(nameCell);
+  const registarationDateCell = document.createElement("th");
+  registarationDateCell.innerText = "תאריך הצטרפות";
+  row.appendChild(registarationDateCell);
   const statusCell = document.createElement("th");
   statusCell.innerText = "סטטוס הרשמה";
   row.appendChild(statusCell);
   const blankCell = document.createElement("th");
   row.appendChild(blankCell);
+  const anotherBlankCell = document.createElement("th");
+  row.appendChild(anotherBlankCell);
   table.appendChild(row);
 
   container.innerHTML = "";
   container.appendChild(table);
   return table;
+}
+
+function formatDate(date) {
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+
+  if (day < 10) {
+    day = "0" + day;
+  }
+  if (month < 10) {
+    month = "0" + month;
+  }
+
+  return `${day}/${month}/${year}`;
 }
 
 function cancel() {
@@ -74,11 +120,14 @@ function cancel() {
     .get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-        const { name, isActive } = doc.data();
+        const { name, createdAt: firebaseCreatedAt, isActive } = doc.data();
+        const createdAt = formatDate(firebaseCreatedAt.toDate());
+
         addRow(
           table,
           doc.id,
           name,
+          createdAt,
           isActive === true || isActive === undefined
         );
       });
