@@ -30,8 +30,7 @@ function addRow(table, key, name, registarationDate, isActive) {
     db.collection("members")
       .doc(key)
       .update({ isActive: !isActive })
-      .then(res => {
-        console.log(res);
+      .then(_ => {
         toggleSubscriptionCell.innerHTML = "בוצע";
       });
   }
@@ -71,6 +70,23 @@ function addRow(table, key, name, registarationDate, isActive) {
   openQRCodeLink.href = "#";
   openQRCodeLink.addEventListener("click", () => openQRCode(key));
   openQRCodeCell.appendChild(openQRCodeLink);
+  const space = document.createElement("spa");
+  space.innerText = "\xa0\xa0";
+  openQRCodeCell.appendChild(space);
+  const removeLink = document.createElement("a");
+  function remove(key) {
+    db.collection("members")
+      .doc(key)
+      .delete()
+      .then(_ => {
+        removeLink.style = "pointer-events: none; cursor: default; color: black;";
+        removeLink.innerHTML = "בוצע";
+      });
+  }
+  removeLink.innerText = "מחיקה";
+  removeLink.href = "#";
+  removeLink.addEventListener("click", () => remove(key));
+  openQRCodeCell.appendChild(removeLink);
   row.appendChild(openQRCodeCell);
 
   table.appendChild(row);
