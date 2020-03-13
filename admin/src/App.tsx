@@ -19,6 +19,7 @@ import PageName from "./pages/PageName";
 import AddMemberPage from "./pages/AddMemberPage";
 import SearchPage from "./pages/SearchPage";
 import ListMembersPage from "./pages/ListMembersPage";
+import firebase from "./Firebase";
 
 const drawerWidth = 240;
 
@@ -72,19 +73,32 @@ const App = ({ container }: ResponsiveDrawerProps) => {
     setMobileOpen(!mobileOpen);
   };
 
+  const logout = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        setIsLoggedIn(false);
+        setPageName(PageName.Login);
+      })
+      .catch(_ => {
+        window.close();
+      });
+  };
+
   const performDrawerAction = (action: DrawerAction | null) => {
     switch (action) {
       case DrawerAction.Add:
-        console.log("Add was clicked!");
+        setPageName(PageName.Add);
         break;
       case DrawerAction.ListAll:
-        console.log("List was clicked!");
+        setPageName(PageName.ListAll);
         break;
       case DrawerAction.Serach:
-        console.log("Serach was clicked!");
+        setPageName(PageName.Search);
         break;
       case DrawerAction.Logout:
-        console.log("Logout was clicked!");
+        logout();
         break;
     }
   };
