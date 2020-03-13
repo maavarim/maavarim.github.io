@@ -32,8 +32,7 @@ export enum DrawerAction {
   Add,
   ListAll,
   Serach,
-  Logout,
-  Login
+  Logout
 }
 
 type ListItemContent = {
@@ -83,7 +82,9 @@ export const Drawer = ({ isLoggedIn, perform, ...props }: DrawerProps) => {
               <ListItem
                 button
                 key={index}
-                onClick={() => listItem.action && perform(listItem.action)}
+                onClick={() =>
+                  listItem.action !== undefined && perform(listItem.action)
+                }
               >
                 <ListItemIcon>{listItem.icon}</ListItemIcon>
                 <ListItemText primary={listItem.title} />

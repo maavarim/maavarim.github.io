@@ -86,9 +86,6 @@ const App = ({ container }: ResponsiveDrawerProps) => {
       case DrawerAction.Logout:
         console.log("Logout was clicked!");
         break;
-      case DrawerAction.Login:
-        console.log("Login was clicked!");
-        break;
     }
   };
 
