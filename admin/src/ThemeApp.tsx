@@ -11,12 +11,26 @@ const theme = createMuiTheme(
     direction: "rtl",
     palette: {
       primary: { main: "#8e24aa" }
+    },
+    typography: {
+      fontFamily: [
+        "Assistant",
+        "-apple-system",
+        "BlinkMacSystemFont",
+        '"Segoe UI"',
+        "Roboto",
+        '"Helvetica Neue"',
+        "Arial",
+        "sans-serif",
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"'
+      ].join(",")
     }
   },
   heIL
 );
 
-// Configure JSS
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 
 type RTLProps = {
