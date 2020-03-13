@@ -15,6 +15,10 @@ import {
 
 import { DrawerAction, Drawer } from "./Drawer";
 import LoginPage from "./pages/LoginPage";
+import PageName from "./pages/PageName";
+import AddMemberPage from "./pages/AddMemberPage";
+import SearchPage from "./pages/SearchPage";
+import ListMembersPage from "./pages/ListMembersPage";
 
 const drawerWidth = 240;
 
@@ -59,7 +63,7 @@ interface ResponsiveDrawerProps {
 
 const App = ({ container }: ResponsiveDrawerProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [page, setPage] = useState(<LoginPage />);
+  const [pageName, setPageName] = useState(PageName.Login);
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -69,7 +73,41 @@ const App = ({ container }: ResponsiveDrawerProps) => {
   };
 
   const performDrawerAction = (action: DrawerAction | null) => {
-    console.log(action);
+    switch (action) {
+      case DrawerAction.Add:
+        console.log("Add was clicked!");
+        break;
+      case DrawerAction.ListAll:
+        console.log("List was clicked!");
+        break;
+      case DrawerAction.Serach:
+        console.log("Serach was clicked!");
+        break;
+      case DrawerAction.Logout:
+        console.log("Logout was clicked!");
+        break;
+      case DrawerAction.Login:
+        console.log("Login was clicked!");
+        break;
+    }
+  };
+
+  const onLogin = () => {
+    setPageName(PageName.Add);
+    setIsLoggedIn(true);
+  };
+
+  const page = () => {
+    switch (pageName) {
+      case PageName.Login:
+        return <LoginPage loginCallaback={onLogin} />;
+      case PageName.Add:
+        return <AddMemberPage />;
+      case PageName.ListAll:
+        return <ListMembersPage />;
+      case PageName.Search:
+        return <SearchPage />;
+    }
   };
 
   return (
@@ -124,7 +162,7 @@ const App = ({ container }: ResponsiveDrawerProps) => {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        {page}
+        {page()}
       </main>
     </div>
   );

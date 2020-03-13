@@ -62,7 +62,11 @@ export const Drawer = ({ isLoggedIn, perform, ...props }: DrawerProps) => {
           action: DrawerAction.ListAll,
           title: "כל המינויים"
         },
-        { icon: <EditTwoTone />, action: DrawerAction.Serach, title: "חיפוש" },
+        {
+          icon: <EditTwoTone />,
+          action: DrawerAction.Serach,
+          title: "חיפוש ועריכה"
+        },
         null,
         { icon: <LockTwoTone />, action: DrawerAction.Logout, title: "התנתקות" }
       ]
@@ -85,7 +89,7 @@ export const Drawer = ({ isLoggedIn, perform, ...props }: DrawerProps) => {
                 <ListItemText primary={listItem.title} />
               </ListItem>
             ) : (
-              <Divider />
+              <Divider key={index} />
             )
           )}
         </List>
