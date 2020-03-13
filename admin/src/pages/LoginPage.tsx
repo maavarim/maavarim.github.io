@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 
 import firebase from "../Firebase";
+import config from "../config";
 
 interface LoginPageProps {
   loginCallaback: () => void;
@@ -22,27 +23,35 @@ const LoginPage = ({ loginCallaback }: LoginPageProps) => {
   const setGenericError = () =>
     setErrorMessage("חלה שגיאה בנסיון ההתחברות. נסו שוב.");
 
-  const auth = () => {
+  firebase.auth().onAuthStateChanged(user => {
+    if (user !== null && user.email === AMDIN_EMAIL) loginCallaback();
+  });
+
+  const auth = async () => {
     setErrorMessage(null);
     setLoading(true);
     const provider = new firebase.auth.GoogleAuthProvider();
-    firebase
+    await firebase
       .auth()
-      .signInWithPopup(provider)
-      .then(result => {
-        setLoading(false);
-        if (result.user === null) {
-          setGenericError();
-          return;
-        }
-        var { email } = result.user;
-        if (email === AMDIN_EMAIL) loginCallaback();
-        else setErrorMessage("יש להתחבר עם חשבון המערכת הניהולי.");
-      })
-      .catch(_ => {
-        setLoading(false);
+      .setPersistence(
+        config.DEBUG
+          ? firebase.auth.Auth.Persistence.LOCAL
+          : firebase.auth.Auth.Persistence.NONE
+      );
+
+    try {
+      const { user } = await firebase.auth().signInWithPopup(provider);
+      setLoading(false);
+      if (user === null) {
         setGenericError();
-      });
+        return;
+      }
+      if (user.email === AMDIN_EMAIL) loginCallaback();
+      else setErrorMessage("יש להתחבר עם חשבון המערכת הניהולי.");
+    } catch {
+      setLoading(false);
+      setGenericError();
+    }
   };
 
   return (
