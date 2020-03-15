@@ -15,7 +15,6 @@
     "@types/react-dom": "^16.9.5",
     "@types/styled-components": "^5.0.1",
     "easyqrcodejs": "^3.5.0",
-    "easyqrcodejs-nodejs": "^3.5.1",
     "firebase": "^7.11.0",
     "jss-rtl": "^0.3.0",
     "mdi-material-ui": "^6.12.0",
