@@ -1,9 +1,14 @@
-import React, { useMemo, useState, useEffect, Fragment } from "react";
+import React, {
+  useMemo,
+  useState,
+  useEffect,
+  Fragment,
+  useReducer,
+  useCallback
+} from "react";
 import {
-  Typography,
   Box,
   Button,
-  Paper,
   TableContainer,
   Table,
   TableHead,
@@ -11,14 +16,9 @@ import {
   TableRow,
   TableCell,
   makeStyles,
-  Container,
   IconButton,
   Checkbox,
-  styled,
-  TextField,
-  RadioGroup,
-  FormControlLabel,
-  Radio
+  styled
 } from "@material-ui/core";
 import { EditTwoTone } from "@material-ui/icons";
 import firebase from "../Firebase";
@@ -47,69 +47,147 @@ interface MembersTableProps {
 
 const LIMIT = 20;
 
+const getFirestoreQuery = (
+  db: firebase.firestore.Firestore,
+  query: string | undefined,
+  lastVisibleMemberDoc: firebase.firestore.QueryDocumentSnapshot<
+    firebase.firestore.DocumentData
+  > | null
+) => {
+  let firestoreQuery: firebase.firestore.Query = db.collection("members");
+  if (query !== undefined) {
+    firestoreQuery = firestoreQuery.orderBy("name").where("name", ">=", query);
+  } else {
+    firestoreQuery = firestoreQuery.orderBy("registrationDate");
+  }
+
+  if (lastVisibleMemberDoc !== null) {
+    firestoreQuery = firestoreQuery.startAfter(lastVisibleMemberDoc);
+  }
+
+  return firestoreQuery.limit(LIMIT);
+};
+
+enum MembersReducerActionName {
+  LoadMore,
+  AddMembers,
+  UpdateMember,
+  DeleteMember,
+  NewSearch
+}
+
+interface MembersReducerAction {
+  name: MembersReducerActionName;
+  payload?: Member | Member[];
+}
+
 const MembersTable = ({ query }: MembersTableProps) => {
   const classes = useStyles();
   const db = useMemo(firebase.firestore, []);
-  const [members, setMembers] = useState<Member[] | null>(null);
-
-  const getFirestoreQuery = (
-    lastVisibleMemberDoc: firebase.firestore.QueryDocumentSnapshot<
-      firebase.firestore.DocumentData
-    > | null
-  ) => {
-    let firestoreQuery: firebase.firestore.Query = db.collection("members");
-    if (query !== undefined) {
-      firestoreQuery = firestoreQuery
-        .where("name", ">=", query)
-        .orderBy("nameDate");
-    } else {
-      firestoreQuery = firestoreQuery.orderBy("registrationDate");
-    }
-
-    if (lastVisibleMemberDoc !== null) {
-      firestoreQuery = firestoreQuery.startAfter(lastVisibleMemberDoc);
-    }
-
-    return firestoreQuery.limit(LIMIT);
-  };
 
   let [
-    nextMembersQuery,
-    setNextMembersQuery
-  ] = useState<firebase.firestore.Query | null>(getFirestoreQuery(null));
+    lastVisibleMemberDoc,
+    setLastVisibleMemberDoc
+  ] = useState<firebase.firestore.QueryDocumentSnapshot<
+    firebase.firestore.DocumentData
+  > | null>(null);
+  let [allDisplayed, setAllDisplayed] = useState(false);
 
-  const loadMoreMembers = () => {
-    nextMembersQuery?.get().then(documentSnapshots => {
-      if (documentSnapshots.empty) {
-        return setNextMembersQuery(null);
+  const getMoreMembers: () => Promise<Member[]> = useCallback(
+    () =>
+      new Promise((resolve, reject) => {
+        if (allDisplayed) {
+          return;
+        }
+
+        getFirestoreQuery(db, query, lastVisibleMemberDoc)
+          .get()
+          .then(documentSnapshots => {
+            if (documentSnapshots.empty) {
+              setAllDisplayed(true);
+              resolve([]);
+              return;
+            }
+            const newMemberDocs = documentSnapshots.docs;
+            const newMembers = newMemberDocs.map(doc => {
+              const docData = doc.data();
+              return {
+                key: doc.id,
+                name: docData.name,
+                isActive: docData.isActive,
+                phoneNumber: docData.phoneNumber ?? "",
+                moreDetails: docData.moreDetails ?? "",
+                registrationDate: docData.registrationDate.toDate()
+              };
+            });
+            setLastVisibleMemberDoc(
+              newMemberDocs[documentSnapshots.docs.length - 1]
+            );
+
+            if (documentSnapshots.size < LIMIT) {
+              setAllDisplayed(true);
+            }
+
+            resolve(newMembers);
+          })
+          .catch(reject);
+      }),
+    [db, query, lastVisibleMemberDoc, allDisplayed]
+  );
+
+  const [shouldLoadMembers, setShouldLoadMembers] = useState(false);
+
+  const typedNull: Member[] | null = null;
+  const [members, dispatchMembersAction] = useReducer(
+    (curentMembers: Member[] | null, action: MembersReducerAction) => {
+      switch (action.name) {
+        case MembersReducerActionName.AddMembers:
+          return [...(curentMembers ?? []), ...(action.payload as Member[])];
+
+        case MembersReducerActionName.UpdateMember:
+          const updatedMember = action.payload as Member;
+          return (
+            curentMembers?.map(member =>
+              updatedMember.key === member.key ? updatedMember : member
+            ) ?? null
+          );
+
+        case MembersReducerActionName.DeleteMember:
+          const deletedMember = action.payload as Member;
+          return (
+            curentMembers?.filter(member => deletedMember.key !== member.key) ??
+            null
+          );
+
+        case MembersReducerActionName.LoadMore:
+          setShouldLoadMembers(true);
+          return curentMembers;
+
+        case MembersReducerActionName.NewSearch:
+          setLastVisibleMemberDoc(null);
+          setAllDisplayed(false);
+          setShouldLoadMembers(true);
+          return null;
       }
-      const newMemberDocs = documentSnapshots.docs;
-      const lastVisibleMemberDoc =
-        newMemberDocs[documentSnapshots.docs.length - 1];
+    },
+    typedNull
+  );
 
-      const newMembers = newMemberDocs.map(doc => {
-        const docData = doc.data();
-        return {
-          key: doc.id,
-          name: docData.name,
-          isActive: docData.isActive,
-          phoneNumber: docData.phoneNumber ?? "",
-          moreDetails: docData.moreDetails ?? "",
-          registrationDate: docData.registrationDate.toDate()
-        };
+  useEffect(() => {
+    dispatchMembersAction({ name: MembersReducerActionName.NewSearch });
+  }, [query]);
+
+  useEffect(() => {
+    if (shouldLoadMembers) {
+      setShouldLoadMembers(false);
+      getMoreMembers().then(moreMembers => {
+        dispatchMembersAction({
+          name: MembersReducerActionName.AddMembers,
+          payload: moreMembers
+        });
       });
-
-      setMembers([...(members ?? []), ...newMembers]);
-
-      setNextMembersQuery(
-        documentSnapshots.size < LIMIT
-          ? null
-          : getFirestoreQuery(lastVisibleMemberDoc)
-      );
-    });
-  };
-
-  useEffect(loadMoreMembers, []);
+    }
+  }, [shouldLoadMembers, getMoreMembers]);
 
   const [memberToEdit, setMemberToEdit] = useState<Member | null>(null);
   const [isEditMemberDialogOpened, setIsEditMemberDialogOpened] = useState(
@@ -117,17 +195,17 @@ const MembersTable = ({ query }: MembersTableProps) => {
   );
 
   const updateMember = (updatedMember: Member) => {
-    setMembers(
-      members?.map(member =>
-        updatedMember.key === member.key ? updatedMember : member
-      ) ?? null
-    );
+    dispatchMembersAction({
+      name: MembersReducerActionName.UpdateMember,
+      payload: updatedMember
+    });
   };
 
   const deleteMember = (deletedMember: Member) => {
-    setMembers(
-      members?.filter(member => deletedMember.key !== member.key) ?? null
-    );
+    dispatchMembersAction({
+      name: MembersReducerActionName.DeleteMember,
+      payload: deletedMember
+    });
   };
 
   const setSubscriptionOf = (member: Member, status: boolean) => {
@@ -209,11 +287,15 @@ const MembersTable = ({ query }: MembersTableProps) => {
               </TableBody>
             </Table>
           </TableContainer>
-          {nextMembersQuery !== null && (
+          {!allDisplayed && (
             <Box>
               <Button
                 className={classes.loadMoreButton}
-                onClick={loadMoreMembers}
+                onClick={() =>
+                  dispatchMembersAction({
+                    name: MembersReducerActionName.LoadMore
+                  })
+                }
                 color="primary"
               >
                 אפשר לראות עוד חברים.ות?

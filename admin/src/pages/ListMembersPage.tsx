@@ -3,7 +3,6 @@ import {
   Typography,
   Box,
   Paper,
-  makeStyles,
   Container,
 } from "@material-ui/core";
 import MembersTable from "../components/MembersTable";
