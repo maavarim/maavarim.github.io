@@ -12,30 +12,65 @@ import {
 import Alert from "../../components/Alert";
 import Member from "../../Member";
 import MemberEditor from "../../components/MemberEditor";
+import { red } from "@material-ui/core/colors";
 
 interface DeleteMemberDialogProps {
   db: firebase.firestore.Firestore;
   member: Member | null;
   setMember: (member: Member | null) => void;
   editCallback: (member: Member) => void;
+  deleteCallback: (member: Member) => void;
 }
 
 const DialogContentWithoutPadding = styled(DialogContent)({
   padding: "8px"
 });
 
+const DeleteButton = styled(Button)({
+  color: red[700]
+});
+
 const EditMemberDialog = ({
   db,
   member,
   setMember,
-  editCallback
+  editCallback,
+  deleteCallback
 }: DeleteMemberDialogProps) => {
   const [editedMember, setEditedMember] = useState<Member | null>(null);
-  const [successSnackbarIsOpen, setSuccessSnackbarIsOpen] = useState(false);
+  const [successEditSnackbarIsOpen, setSuccessEditSnackbarIsOpen] = useState(
+    false
+  );
+  const [
+    successDeleteSnackbarIsOpen,
+    setSuccessDeleteSnackbarIsOpen
+  ] = useState(false);
+  const [deleteSafeSwitchIsOn, setDeleteSafeSwitchIsOn] = useState(false);
 
-  const handleClose = () => setMember(null);
+  const handleClose = () => {
+    setMember(null);
+    setDeleteSafeSwitchIsOn(false);
+  };
 
-  const edit = () => {
+  const deleteMember = () => {
+    if (!deleteSafeSwitchIsOn) {
+      return setDeleteSafeSwitchIsOn(true);
+    }
+
+    if (editedMember === null || editedMember.key === "") {
+      return;
+    }
+    db.collection("members")
+      .doc(editedMember.key)
+      .delete()
+      .then(() => {
+        setSuccessDeleteSnackbarIsOpen(true);
+        deleteCallback(editedMember);
+        handleClose();
+      });
+  };
+
+  const editMember = () => {
     if (editedMember === null || editedMember.key === "") {
       return;
     }
@@ -43,7 +78,7 @@ const EditMemberDialog = ({
       .doc(editedMember.key)
       .set(editedMember)
       .then(() => {
-        setSuccessSnackbarIsOpen(true);
+        setSuccessDeleteSnackbarIsOpen(true);
         editCallback(editedMember);
         handleClose();
       });
@@ -75,8 +110,16 @@ const EditMemberDialog = ({
           <Button onClick={handleClose} color="primary">
             ביטול
           </Button>
+          <DeleteButton
+            onClick={deleteMember}
+            disabled={editedMember === null}
+            variant="outlined"
+            color="inherit"
+          >
+            {deleteSafeSwitchIsOn ? `באמת למחוק את ${member?.name}?` : "מחיקה"}
+          </DeleteButton>
           <Button
-            onClick={edit}
+            onClick={editMember}
             disabled={editedMember === null}
             variant="contained"
             color="primary"
@@ -86,15 +129,27 @@ const EditMemberDialog = ({
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={successSnackbarIsOpen}
+        open={successEditSnackbarIsOpen}
         autoHideDuration={6000}
-        onClose={() => setSuccessSnackbarIsOpen(false)}
+        onClose={() => setSuccessEditSnackbarIsOpen(false)}
       >
         <Alert
-          onClose={() => setSuccessSnackbarIsOpen(false)}
+          onClose={() => setSuccessEditSnackbarIsOpen(false)}
           severity="success"
         >
           החבר.ה נערכ.ה בהצלחה
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={successDeleteSnackbarIsOpen}
+        autoHideDuration={6000}
+        onClose={() => setSuccessDeleteSnackbarIsOpen(false)}
+      >
+        <Alert
+          onClose={() => setSuccessDeleteSnackbarIsOpen(false)}
+          severity="success"
+        >
+          החבר.ה נמחק.ה בהצלחה
         </Alert>
       </Snackbar>
     </Fragment>

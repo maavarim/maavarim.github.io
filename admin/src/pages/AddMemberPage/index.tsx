@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Button,
@@ -45,8 +45,16 @@ const AddMemberPage = () => {
 
   const setGenericErrorMessage = () => {
     setSubmitButtonState(SubmitButtonState.Enabled);
-    setShowErrorMessage(true)
+    setShowErrorMessage(true);
   };
+
+  useEffect(() => {
+    setSubmitButtonState(
+      newMember === null && showErrors
+        ? SubmitButtonState.Disabled
+        : SubmitButtonState.Enabled
+    );
+  }, [newMember, showErrors]);
 
   const create = async () => {
     if (newMember === null) {
@@ -109,13 +117,7 @@ const AddMemberPage = () => {
                 הוספת חבר.ה
               </Typography>
             </Box>
-            <MemberEditor
-              showErrors={showErrors}
-              onResult={result => {
-                setSubmitButtonState(SubmitButtonState.Enabled);
-                setNewMember(result);
-              }}
-            />
+            <MemberEditor showErrors={showErrors} onResult={setNewMember} />
             <Box
               className={classes.flex}
               justifyContent="flex-end"
@@ -175,7 +177,7 @@ const AddMemberPage = () => {
           onClose={() => setShowErrorMessage(false)}
         >
           <Alert onClose={() => setShowErrorMessage(false)} severity="error">
-          חלה שגיאה בהוספת החבר.ה החדש.ה, נסו שוב מאוחר יותר.
+            חלה שגיאה בהוספת החבר.ה החדש.ה, נסו שוב מאוחר יותר.
           </Alert>
         </Snackbar>
       </Container>

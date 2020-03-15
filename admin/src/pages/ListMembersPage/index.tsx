@@ -16,11 +16,7 @@ import {
   Checkbox,
   styled
 } from "@material-ui/core";
-import {
-  EditTwoTone,
-  StarBorderTwoTone,
-  StarTwoTone
-} from "@material-ui/icons";
+import { EditTwoTone } from "@material-ui/icons";
 import firebase from "../../Firebase";
 import { formatDate } from "../../utils";
 import Member from "../../Member";
@@ -40,13 +36,6 @@ const useStyles = makeStyles({
 const TableCellBold = styled(TableCell)({
   fontWeight: 600
 });
-
-interface FirebaseMember {
-  name: string;
-  isActive: boolean;
-  phoneNumber: string;
-  registrationDate: firebase.firestore.Timestamp;
-}
 
 const LIMIT = 20;
 
@@ -110,6 +99,11 @@ const ListMembersPage = () => {
       ) ?? null
     );
   };
+  const deleteMember = (deletedMember: Member) => {
+    setMembers(
+      members?.filter(member => deletedMember.key !== member.key) ?? null
+    );
+  };
 
   const setSubscriptionOf = (member: Member, status: boolean) => {
     const updatedMember: Member = {
@@ -133,6 +127,7 @@ const ListMembersPage = () => {
           member={memberToEdit}
           setMember={setMemberToEdit}
           editCallback={updateMember}
+          deleteCallback={deleteMember}
         />
         <Paper>
           <Box p={2}>

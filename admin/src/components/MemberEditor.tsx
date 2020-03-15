@@ -49,8 +49,9 @@ const MemberEditor = ({
 }: MemberEditorProps) => {
   const classes = useStyles();
 
+  const [key] = useState(initialMember?.key ?? "");
   const [name, setName] = useState(initialMember?.name ?? "");
-  const [nameError, setNameError] = useState(name.trim() === "");
+  const nameError = name.trim() === "";
 
   const [phoneNumber, setPhoneNumber] = useState(
     initialMember?.phoneNumber ?? ""
@@ -68,7 +69,7 @@ const MemberEditor = ({
       nameError
         ? null
         : {
-            key: initialMember?.key ?? "",
+            key,
             name,
             isActive,
             phoneNumber,
@@ -77,7 +78,7 @@ const MemberEditor = ({
           }
     );
   }, [
-    initialMember,
+    key,
     name,
     nameError,
     isActive,
@@ -103,11 +104,7 @@ const MemberEditor = ({
             helperText={
               showErrors && nameError && "אי אפשר להוסיף חבר.ה בלי שם"
             }
-            onChange={event => {
-              const newName = event.target.value;
-              setNameError(newName.trim() === "");
-              setName(newName);
-            }}
+            onChange={event => setName(event.target.value)}
             variant="filled"
             InputProps={{
               startAdornment: (
