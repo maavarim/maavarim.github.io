@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "246a13731b5e5c97aad1caabfd1eb6ba",
+    "revision": "72a7d452da49d733b4691afc21b261eb",
     "url": "https://maavarim.github.io/admin/index.html"
   },
   {
-    "revision": "1028788f9f8e646495dd",
+    "revision": "a003d17a7140d81ca8e1",
     "url": "https://maavarim.github.io/admin/static/css/main.3cedba41.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "https://maavarim.github.io/admin/static/js/2.8d8076d3.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "1028788f9f8e646495dd",
-    "url": "https://maavarim.github.io/admin/static/js/main.de4a27c7.chunk.js"
+    "revision": "a003d17a7140d81ca8e1",
+    "url": "https://maavarim.github.io/admin/static/js/main.8673dcf6.chunk.js"
   },
   {
     "revision": "c469c28bf7bb92527c2e",

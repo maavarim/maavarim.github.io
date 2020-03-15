@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "https://maavarim.github.io/admin/static/css/main.3cedba41.chunk.css",
-    "main.js": "https://maavarim.github.io/admin/static/js/main.de4a27c7.chunk.js",
-    "main.js.map": "https://maavarim.github.io/admin/static/js/main.de4a27c7.chunk.js.map",
+    "main.js": "https://maavarim.github.io/admin/static/js/main.8673dcf6.chunk.js",
+    "main.js.map": "https://maavarim.github.io/admin/static/js/main.8673dcf6.chunk.js.map",
     "runtime-main.js": "https://maavarim.github.io/admin/static/js/runtime-main.a761ffea.js",
     "runtime-main.js.map": "https://maavarim.github.io/admin/static/js/runtime-main.a761ffea.js.map",
     "static/js/2.8d8076d3.chunk.js": "https://maavarim.github.io/admin/static/js/2.8d8076d3.chunk.js",
     "static/js/2.8d8076d3.chunk.js.map": "https://maavarim.github.io/admin/static/js/2.8d8076d3.chunk.js.map",
     "index.html": "https://maavarim.github.io/admin/index.html",
-    "precache-manifest.019b8fd5e11ea0c6920ca3ba7a322464.js": "https://maavarim.github.io/admin/precache-manifest.019b8fd5e11ea0c6920ca3ba7a322464.js",
+    "precache-manifest.c546b6307ff67bd04b9787204971e002.js": "https://maavarim.github.io/admin/precache-manifest.c546b6307ff67bd04b9787204971e002.js",
     "service-worker.js": "https://maavarim.github.io/admin/service-worker.js",
     "static/css/main.3cedba41.chunk.css.map": "https://maavarim.github.io/admin/static/css/main.3cedba41.chunk.css.map",
     "static/js/2.8d8076d3.chunk.js.LICENSE.txt": "https://maavarim.github.io/admin/static/js/2.8d8076d3.chunk.js.LICENSE.txt",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.a761ffea.js",
     "static/js/2.8d8076d3.chunk.js",
     "static/css/main.3cedba41.chunk.css",
-    "static/js/main.de4a27c7.chunk.js"
+    "static/js/main.8673dcf6.chunk.js"
   ]
 }
