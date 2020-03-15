@@ -38,14 +38,14 @@ const AddMemberPage = () => {
   const [submitButtonState, setSubmitButtonState] = useState(
     SubmitButtonState.Enabled
   );
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [key, setKey] = useState<string | null>(null);
 
   const classes = useStyles();
 
   const setGenericErrorMessage = () => {
     setSubmitButtonState(SubmitButtonState.Enabled);
-    setErrorMessage("חלה שגיאה בהוספת החבר.ה החדש.ה, נסו שוב מאוחר יותר.");
+    setShowErrorMessage(true)
   };
 
   const create = async () => {
@@ -170,12 +170,12 @@ const AddMemberPage = () => {
           </Box>
         )}
         <Snackbar
-          open={errorMessage !== null}
+          open={showErrorMessage}
           autoHideDuration={6000}
-          onClose={() => setErrorMessage(null)}
+          onClose={() => setShowErrorMessage(false)}
         >
-          <Alert onClose={() => setErrorMessage(null)} severity="success">
-            {errorMessage}
+          <Alert onClose={() => setShowErrorMessage(false)} severity="error">
+          חלה שגיאה בהוספת החבר.ה החדש.ה, נסו שוב מאוחר יותר.
           </Alert>
         </Snackbar>
       </Container>
