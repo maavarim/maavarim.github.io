@@ -92,6 +92,10 @@ const ListMembersPage = () => {
   useEffect(loadMoreMembers, []);
 
   const [memberToEdit, setMemberToEdit] = useState<Member | null>(null);
+  const [isEditMemberDialogOpened, setIsEditMemberDialogOpened] = useState(
+    false
+  );
+
   const updateMember = (updatedMember: Member) => {
     setMembers(
       members?.map(member =>
@@ -99,6 +103,7 @@ const ListMembersPage = () => {
       ) ?? null
     );
   };
+
   const deleteMember = (deletedMember: Member) => {
     setMembers(
       members?.filter(member => deletedMember.key !== member.key) ?? null
@@ -123,6 +128,8 @@ const ListMembersPage = () => {
     <Box>
       <Container maxWidth="md">
         <EditMemberDialog
+          open={isEditMemberDialogOpened}
+          onClose={() => setIsEditMemberDialogOpened(false)}
           db={db}
           member={memberToEdit}
           setMember={setMemberToEdit}
@@ -179,7 +186,10 @@ const ListMembersPage = () => {
                         <TableCell align="center" style={{ padding: 0 }}>
                           <IconButton
                             aria-label="עריכה"
-                            onClick={() => setMemberToEdit(member)}
+                            onClick={() => {
+                              setMemberToEdit(member);
+                              setIsEditMemberDialogOpened(true);
+                            }}
                           >
                             <EditTwoTone />
                           </IconButton>

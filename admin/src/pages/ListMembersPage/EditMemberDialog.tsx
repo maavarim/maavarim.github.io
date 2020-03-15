@@ -14,8 +14,10 @@ import Member from "../../Member";
 import MemberEditor from "../../components/MemberEditor";
 import { red } from "@material-ui/core/colors";
 
-interface DeleteMemberDialogProps {
+interface EditMemberDialogProps {
   db: firebase.firestore.Firestore;
+  open: boolean;
+  onClose: () => void;
   member: Member | null;
   setMember: (member: Member | null) => void;
   editCallback: (member: Member) => void;
@@ -32,11 +34,13 @@ const DeleteButton = styled(Button)({
 
 const EditMemberDialog = ({
   db,
+  open,
+  onClose,
   member,
   setMember,
   editCallback,
   deleteCallback
-}: DeleteMemberDialogProps) => {
+}: EditMemberDialogProps) => {
   const [editedMember, setEditedMember] = useState<Member | null>(null);
   const [successEditSnackbarIsOpen, setSuccessEditSnackbarIsOpen] = useState(
     false
@@ -48,7 +52,7 @@ const EditMemberDialog = ({
   const [deleteSafeSwitchIsOn, setDeleteSafeSwitchIsOn] = useState(false);
 
   const handleClose = () => {
-    setMember(null);
+    onClose();
     setDeleteSafeSwitchIsOn(false);
   };
 
@@ -87,7 +91,7 @@ const EditMemberDialog = ({
   return (
     <Fragment>
       <Dialog
-        open={member !== null}
+        open={open && member !== null}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
