@@ -18,12 +18,12 @@ import {
   PhoneTwoTone,
   CalendarTodayTwoTone
 } from "@material-ui/icons";
-import Alert from "../components/Alert";
-import { createRandomString, parseDate } from "../utils";
-import firebase from "../Firebase";
-import MaavarimQRCode from "../components/MaavarimQRCode";
-import styles from "./AddMemberPage.module.scss";
-import SuccessIllustrationSvg from "../img/SuccessIllustration.svg";
+import Alert from "../../components/Alert";
+import { createRandomString, parseDate } from "../../utils";
+import firebase from "../../Firebase";
+import MaavarimQRCode from "../../components/MaavarimQRCode";
+import styles from "./style.module.scss";
+import SuccessIllustrationSvg from "../../img/SuccessIllustration.svg";
 
 const useStyles = makeStyles({
   fieldsContainer: {

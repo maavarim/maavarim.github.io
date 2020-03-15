@@ -16,8 +16,8 @@ import {
   styled
 } from "@material-ui/core";
 import { DeleteTwoTone, EditTwoTone } from "@material-ui/icons";
-import firebase from "../Firebase";
-import { formatDate } from "../utils";
+import firebase from "../../Firebase";
+import { formatDate } from "../../utils";
 
 const useStyles = makeStyles({
   table: {
