@@ -64,7 +64,7 @@ interface ResponsiveDrawerProps {
 
 const App = ({ container }: ResponsiveDrawerProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [pageName, setPageName] = useState(PageName.Login);
+  const [pageName, setPageName] = useState(PageName.ListAll);
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);

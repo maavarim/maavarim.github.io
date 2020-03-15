@@ -167,7 +167,7 @@ const ListMembersPage = () => {
                     onClick={loadMoreMembers}
                     color="primary"
                   >
-                    אפשר עוד קצת חברים.ות?
+                    אפשר לראות עוד חברים.ות?
                   </Button>
                 </Box>
               )}
