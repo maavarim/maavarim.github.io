@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.45",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -14,6 +15,7 @@
     "@types/react-dom": "^16.9.5",
     "@types/styled-components": "^5.0.1",
     "easyqrcodejs": "^3.5.0",
+    "easyqrcodejs-nodejs": "^3.5.1",
     "firebase": "^7.11.0",
     "jss-rtl": "^0.3.0",
     "mdi-material-ui": "^6.12.0",
