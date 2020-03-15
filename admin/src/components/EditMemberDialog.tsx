@@ -9,9 +9,9 @@ import {
   Typography,
   styled
 } from "@material-ui/core";
-import Alert from "../../components/Alert";
-import Member from "../../Member";
-import MemberEditor from "../../components/MemberEditor";
+import Alert from "./Alert";
+import Member from "../Member";
+import MemberEditor from "./MemberEditor";
 import { red } from "@material-ui/core/colors";
 
 interface EditMemberDialogProps {
@@ -19,7 +19,6 @@ interface EditMemberDialogProps {
   open: boolean;
   onClose: () => void;
   member: Member | null;
-  setMember: (member: Member | null) => void;
   editCallback: (member: Member) => void;
   deleteCallback: (member: Member) => void;
 }
@@ -37,11 +36,12 @@ const EditMemberDialog = ({
   open,
   onClose,
   member,
-  setMember,
   editCallback,
   deleteCallback
 }: EditMemberDialogProps) => {
   const [editedMember, setEditedMember] = useState<Member | null>(null);
+  console.log(editedMember);
+  
   const [successEditSnackbarIsOpen, setSuccessEditSnackbarIsOpen] = useState(
     false
   );

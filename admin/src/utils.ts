@@ -11,7 +11,7 @@ export function createRandomString(length: number): string {
 
 export const parseDate = (dateAsString: string) => {
   const [year, month, day] = dateAsString.split(/\D/).map(s => +s);
-  return new Date(year, month - 1, day);
+  return new Date(year, month - 1, day, 12);
 };
 
 export function formatDate(date: Date): string {
