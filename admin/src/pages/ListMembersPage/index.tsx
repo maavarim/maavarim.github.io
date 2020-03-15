@@ -18,6 +18,8 @@ import {
 import { DeleteTwoTone, EditTwoTone } from "@material-ui/icons";
 import firebase from "../../Firebase";
 import { formatDate } from "../../utils";
+import Member from "../../Member";
+import EditMemberDialog from "./EditMemberDialog";
 
 const useStyles = makeStyles({
   table: {
@@ -39,15 +41,6 @@ interface FirebaseMember {
   isActive: boolean;
   phoneNumber: string;
   registrationDate: firebase.firestore.Timestamp;
-}
-
-interface Member {
-  key: string;
-  name: string;
-  isActive: boolean;
-  phoneNumber: string;
-  moreDetails: string;
-  registrationDate: Date;
 }
 
 const LIMIT = 20;
@@ -104,9 +97,17 @@ const ListMembersPage = () => {
 
   useEffect(loadMoreMembers, []);
 
+  const [memberToRemove, setMemberToRemove] = useState<Member | null>(null);
+
   return (
     <Box>
       <Container maxWidth="md">
+        <EditMemberDialog
+          db={db}
+          member={memberToRemove}
+          setMember={setMemberToRemove}
+          editCallback={console.log}
+        />
         <Paper>
           <Box p={2}>
             <Typography variant="h5" component="h2">
@@ -148,7 +149,10 @@ const ListMembersPage = () => {
                           {member.isActive ? "פעיל" : "לא פעיל"}
                         </TableCell>
                         <TableCell align="center" style={{ padding: 0 }}>
-                          <IconButton aria-label="מחיקה">
+                          <IconButton
+                            aria-label="מחיקה"
+                            onClick={() => setMemberToRemove(member)}
+                          >
                             <DeleteTwoTone />
                           </IconButton>
                           <IconButton aria-label="עריכה">

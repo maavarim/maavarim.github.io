@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import {
   Typography,
-  TextField,
   Button,
   Box,
-  InputAdornment,
-  Grid,
   makeStyles,
   Card,
   CardContent,
@@ -13,40 +10,18 @@ import {
   Container,
   CircularProgress
 } from "@material-ui/core";
-import {
-  AccountCircleTwoTone,
-  PhoneTwoTone,
-  CalendarTodayTwoTone
-} from "@material-ui/icons";
-import Alert from "../../components/Alert";
-import { createRandomString, parseDate } from "../../utils";
+import { createRandomString } from "../../utils";
 import firebase from "../../Firebase";
+import MemberEditor from "../../components/MemberEditor";
+import Alert from "../../components/Alert";
 import MaavarimQRCode from "../../components/MaavarimQRCode";
 import styles from "./style.module.scss";
 import SuccessIllustrationSvg from "../../img/SuccessIllustration.svg";
+import Member from "../../Member";
 
 const useStyles = makeStyles({
-  fieldsContainer: {
-    "& .MuiFormControl-root": {
-      width: "100%"
-    }
-  },
-  fullHeightTextField: {
-    height: "100%",
-    "& .MuiTextField-root": {
-      height: "100%",
-      "& .MuiInputBase-root": {
-        height: "100%"
-      }
-    }
-  },
   flex: {
     display: "flex"
-  },
-  ltrTextField: {
-    "& .MuiInputBase-input": {
-      direction: "rtl"
-    }
   }
 });
 
@@ -57,15 +32,8 @@ enum SubmitButtonState {
 }
 
 const AddMemberPage = () => {
-  const [name, setName] = useState("");
-  const nameIsEmpty = name.trim() === "";
-  const [nameError, setNameError] = useState(false);
-
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [registrationDate, setRegistrationDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
-  const [moreDetails, setMoreDetails] = useState("");
+  const [newMember, setNewMember] = useState<Member | null>(null);
+  const [showErrors, setShowErrors] = useState(false);
 
   const [submitButtonState, setSubmitButtonState] = useState(
     SubmitButtonState.Enabled
@@ -81,7 +49,10 @@ const AddMemberPage = () => {
   };
 
   const create = async () => {
-    if (nameIsEmpty) return setNameError(true);
+    if (newMember === null) {
+      return setShowErrors(true);
+    }
+
     setSubmitButtonState(SubmitButtonState.Loading);
 
     const generateNewKey = () => createRandomString(64);
@@ -115,13 +86,10 @@ const AddMemberPage = () => {
         .collection("members")
         .doc(key)
         .set({
-          name,
-          isActive: true,
+          ...newMember,
           registrationDate: firebase.firestore.Timestamp.fromDate(
-            parseDate(registrationDate)
-          ),
-          phoneNumber,
-          moreDetails
+            newMember.registrationDate
+          )
         });
       setSubmitButtonState(SubmitButtonState.Disabled);
     } catch {
@@ -141,86 +109,13 @@ const AddMemberPage = () => {
                 הוספת חבר.ה
               </Typography>
             </Box>
-            <Grid className={classes.fieldsContainer} container spacing={1}>
-              <Grid item container spacing={1} xs={12} md={6}>
-                <Grid item xs={12}>
-                  <TextField
-                    label="שם החבר.ה"
-                    value={name}
-                    error={nameError}
-                    helperText={nameError && "אי אפשר להוסיף חבר.ה בלי שם"}
-                    onChange={event => {
-                      const newName = event.target.value;
-                      setSubmitButtonState(SubmitButtonState.Enabled);
-                      setNameError(nameError && newName.trim() === "");
-                      setName(newName);
-                    }}
-                    variant="filled"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AccountCircleTwoTone />
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="טלפון"
-                    value={phoneNumber}
-                    className={classes.ltrTextField}
-                    type="tel"
-                    onChange={event => {
-                      setSubmitButtonState(SubmitButtonState.Enabled);
-                      setPhoneNumber(event.target.value);
-                    }}
-                    variant="filled"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PhoneTwoTone />
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="תאריך הצטרפות"
-                    defaultValue={registrationDate}
-                    type="date"
-                    onChange={event => {
-                      setSubmitButtonState(SubmitButtonState.Enabled);
-                      setRegistrationDate(event.target.value);
-                    }}
-                    variant="filled"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <CalendarTodayTwoTone />
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Box mr={[1, 1, 0]} className={classes.fullHeightTextField}>
-                  <TextField
-                    label="פרטים נוספים"
-                    multiline
-                    rows={7}
-                    value={moreDetails}
-                    onChange={event => {
-                      setSubmitButtonState(SubmitButtonState.Enabled);
-                      setMoreDetails(event.target.value);
-                    }}
-                    variant="filled"
-                  />
-                </Box>
-              </Grid>
-            </Grid>
+            <MemberEditor
+              showErrors={showErrors}
+              onResult={result => {
+                setSubmitButtonState(SubmitButtonState.Enabled);
+                setNewMember(result);
+              }}
+            />
             <Box
               className={classes.flex}
               justifyContent="flex-end"
