@@ -13,9 +13,14 @@ import {
   makeStyles,
   Container,
   IconButton,
+  Checkbox,
   styled
 } from "@material-ui/core";
-import { DeleteTwoTone, EditTwoTone } from "@material-ui/icons";
+import {
+  EditTwoTone,
+  StarBorderTwoTone,
+  StarTwoTone
+} from "@material-ui/icons";
 import firebase from "../../Firebase";
 import { formatDate } from "../../utils";
 import Member from "../../Member";
@@ -75,8 +80,8 @@ const ListMembersPage = () => {
           key: doc.id,
           name: docData.name,
           isActive: docData.isActive,
-          phoneNumber: docData.phoneNumber,
-          moreDetails: docData.moreDetails,
+          phoneNumber: docData.phoneNumber ?? "",
+          moreDetails: docData.moreDetails ?? "",
           registrationDate: docData.registrationDate.toDate()
         };
       });
@@ -97,16 +102,37 @@ const ListMembersPage = () => {
 
   useEffect(loadMoreMembers, []);
 
-  const [memberToRemove, setMemberToRemove] = useState<Member | null>(null);
+  const [memberToEdit, setMemberToEdit] = useState<Member | null>(null);
+  const updateMember = (updatedMember: Member) => {
+    setMembers(
+      members?.map(member =>
+        updatedMember.key === member.key ? updatedMember : member
+      ) ?? null
+    );
+  };
+
+  const setSubscriptionOf = (member: Member, status: boolean) => {
+    const updatedMember: Member = {
+      ...member,
+      isActive: status
+    };
+
+    db.collection("members")
+      .doc(updatedMember.key)
+      .set(updatedMember)
+      .then(_ => {
+        updateMember(updatedMember);
+      });
+  };
 
   return (
     <Box>
       <Container maxWidth="md">
         <EditMemberDialog
           db={db}
-          member={memberToRemove}
-          setMember={setMemberToRemove}
-          editCallback={console.log}
+          member={memberToEdit}
+          setMember={setMemberToEdit}
+          editCallback={updateMember}
         />
         <Paper>
           <Box p={2}>
@@ -128,8 +154,8 @@ const ListMembersPage = () => {
                       <TableCellBold>תאריך הצטרפות</TableCellBold>
                       <TableCellBold>טלפון</TableCellBold>
                       <TableCellBold>פרטים נוספים</TableCellBold>
-                      <TableCellBold>סטטוס מינוי</TableCellBold>
-                      <TableCellBold align="center">פעולות</TableCellBold>
+                      <TableCellBold align="center">סטטוס מינוי</TableCellBold>
+                      <TableCellBold align="center">עריכה</TableCellBold>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -145,17 +171,21 @@ const ListMembersPage = () => {
                           {member.phoneNumber ? member.phoneNumber : "-"}
                         </TableCell>
                         <TableCell>{member.moreDetails}</TableCell>
-                        <TableCell>
-                          {member.isActive ? "פעיל" : "לא פעיל"}
+                        <TableCell align="center" style={{ padding: 0 }}>
+                          <Checkbox
+                            checked={member.isActive}
+                            onChange={event =>
+                              setSubscriptionOf(member, event.target.checked)
+                            }
+                            color="primary"
+                            inputProps={{ "aria-label": "primary checkbox" }}
+                          />
                         </TableCell>
                         <TableCell align="center" style={{ padding: 0 }}>
                           <IconButton
-                            aria-label="מחיקה"
-                            onClick={() => setMemberToRemove(member)}
+                            aria-label="עריכה"
+                            onClick={() => setMemberToEdit(member)}
                           >
-                            <DeleteTwoTone />
-                          </IconButton>
-                          <IconButton aria-label="עריכה">
                             <EditTwoTone />
                           </IconButton>
                         </TableCell>

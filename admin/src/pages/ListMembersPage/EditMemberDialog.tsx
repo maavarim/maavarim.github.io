@@ -1,22 +1,17 @@
 import React, { useState, Fragment } from "react";
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
   Button,
-  styled,
-  Snackbar
+  Snackbar,
+  Box,
+  Typography,
+  styled
 } from "@material-ui/core";
-import { red } from "@material-ui/core/colors";
 import Alert from "../../components/Alert";
 import Member from "../../Member";
-
-const RemoveButton = styled(Button)({
-  fontWeight: 600,
-  color: red[700]
-});
+import MemberEditor from "../../components/MemberEditor";
 
 interface DeleteMemberDialogProps {
   db: firebase.firestore.Firestore;
@@ -25,31 +20,31 @@ interface DeleteMemberDialogProps {
   editCallback: (member: Member) => void;
 }
 
+const DialogContentWithoutPadding = styled(DialogContent)({
+  padding: "8px"
+});
+
 const EditMemberDialog = ({
   db,
   member,
   setMember,
   editCallback
 }: DeleteMemberDialogProps) => {
-  const [lastNotBlankName, setLastNotBlankName] = useState("");
-  if (member !== null && lastNotBlankName !== member.name) {
-    setLastNotBlankName(member?.name);
-  }
-
+  const [editedMember, setEditedMember] = useState<Member | null>(null);
   const [successSnackbarIsOpen, setSuccessSnackbarIsOpen] = useState(false);
 
   const handleClose = () => setMember(null);
 
-  const deleteMember = () => {
-    if (member === null) {
+  const edit = () => {
+    if (editedMember === null || editedMember.key === "") {
       return;
     }
     db.collection("members")
-      .doc(member.key)
-      .delete()
+      .doc(editedMember.key)
+      .set(editedMember)
       .then(() => {
         setSuccessSnackbarIsOpen(true);
-        editCallback(member);
+        editCallback(editedMember);
         handleClose();
       });
   };
@@ -62,20 +57,32 @@ const EditMemberDialog = ({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogContent>
-          <DialogContentText>
-            החבר.ה <b>{lastNotBlankName}</b> עומד.ת להמחק מהמערכת,
-            <br />
-            באמת לזה התכוונת?
-          </DialogContentText>
-        </DialogContent>
+        <DialogContentWithoutPadding>
+          <Box m={2} mt={0}>
+            <Typography gutterBottom variant="h5" component="h2">
+              עריכת חבר.ה
+            </Typography>
+          </Box>
+          {member && (
+            <MemberEditor
+              initialMember={member}
+              showErrors
+              onResult={setEditedMember}
+            />
+          )}
+        </DialogContentWithoutPadding>
         <DialogActions>
-          <Button onClick={deleteMember} color="primary" autoFocus>
-            בעצם לא
+          <Button onClick={handleClose} color="primary">
+            ביטול
           </Button>
-          <RemoveButton onClick={handleClose} color="primary">
-            כןכן
-          </RemoveButton>
+          <Button
+            onClick={edit}
+            disabled={editedMember === null}
+            variant="contained"
+            color="primary"
+          >
+            עריכה
+          </Button>
         </DialogActions>
       </Dialog>
       <Snackbar

@@ -55,7 +55,7 @@ const MemberEditor = ({
   const [phoneNumber, setPhoneNumber] = useState(
     initialMember?.phoneNumber ?? ""
   );
-  const [isActive, setIsActive] = useState(initialMember?.isActive ?? true);
+  const [isActive] = useState(initialMember?.isActive ?? true);
   const [registrationDate, setRegistrationDate] = useState(
     (initialMember?.registrationDate ?? new Date()).toISOString().split("T")[0]
   );
@@ -76,10 +76,24 @@ const MemberEditor = ({
             registrationDate: parseDate(registrationDate)
           }
     );
-  }, [name, isActive, phoneNumber, moreDetails, registrationDate]);
+  }, [
+    initialMember,
+    name,
+    nameError,
+    isActive,
+    phoneNumber,
+    moreDetails,
+    registrationDate,
+    onResult
+  ]);
 
   return (
-    <Grid className={classes.fieldsContainer} container spacing={1}>
+    <Grid
+      className={classes.fieldsContainer}
+      container
+      spacing={1}
+      style={{ width: "calc(100% + 12px)" }}
+    >
       <Grid item container spacing={1} xs={12} md={6}>
         <Grid item xs={12}>
           <TextField
@@ -138,7 +152,7 @@ const MemberEditor = ({
           />
         </Grid>
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} style={{ paddingLeft: 0 }}>
         <Box mr={[1, 1, 0]} className={classes.fullHeightTextField}>
           <TextField
             label="פרטים נוספים"
