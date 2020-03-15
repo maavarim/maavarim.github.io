@@ -6,7 +6,7 @@ import {
   makeStyles,
   Container,
 } from "@material-ui/core";
-import MembersTable from "../../components/MembersTable";
+import MembersTable from "../components/MembersTable";
 
 const ListMembersPage = () => (
   <Box>

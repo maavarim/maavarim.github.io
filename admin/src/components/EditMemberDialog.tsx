@@ -40,7 +40,6 @@ const EditMemberDialog = ({
   deleteCallback
 }: EditMemberDialogProps) => {
   const [editedMember, setEditedMember] = useState<Member | null>(null);
-  console.log(editedMember);
   
   const [successEditSnackbarIsOpen, setSuccessEditSnackbarIsOpen] = useState(
     false
