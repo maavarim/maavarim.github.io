@@ -13,3 +13,14 @@ export const parseDate = (dateAsString: string) => {
   const [year, month, day] = dateAsString.split(/\D/).map(s => +s);
   return new Date(year, month - 1, day);
 };
+
+export function formatDate(date: Date): string {
+  const year = date.getFullYear();
+  let month = (date.getMonth() + 1);
+  let day = date.getDate();
+
+  const dayString = day < 10 ? `0${day}` : day;
+  const monthString = month < 10 ? `0${month}` : month;
+
+  return `${dayString}/${monthString}/${year}`;
+}

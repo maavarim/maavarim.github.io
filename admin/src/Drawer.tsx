@@ -59,7 +59,7 @@ export const Drawer = ({ isLoggedIn, perform, ...props }: DrawerProps) => {
         {
           icon: <ListAltTwoTone />,
           action: DrawerAction.ListAll,
-          title: "כל המינויים"
+          title: "כל החברים.ות"
         },
         {
           icon: <EditTwoTone />,
