@@ -57,6 +57,12 @@ const getFirestoreQuery = (
   let firestoreQuery: firebase.firestore.Query = db.collection("members");
   if (query !== undefined) {
     firestoreQuery = firestoreQuery.orderBy("name").where("name", ">=", query);
+    if (query !== "") {
+      const endString =
+        query.substring(0, query.length - 1) +
+        String.fromCharCode(query.charCodeAt(query.length - 1) + 1);
+      firestoreQuery = firestoreQuery.where("name", "<", endString);
+    }
   } else {
     firestoreQuery = firestoreQuery.orderBy("registrationDate");
   }
@@ -287,6 +293,13 @@ const MembersTable = ({ query }: MembersTableProps) => {
               </TableBody>
             </Table>
           </TableContainer>
+          {members !== null && members.length === 0 && (
+            <Box>
+              <Button className={classes.loadMoreButton} disabled>
+                לא נמצאו חברים.ות ששמם.ן מתחיל ב-<b>{query}</b>.
+              </Button>
+            </Box>
+          )}
           {!allDisplayed && (
             <Box>
               <Button
