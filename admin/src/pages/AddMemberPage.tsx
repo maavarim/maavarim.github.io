@@ -10,7 +10,8 @@ import {
   Card,
   CardContent,
   Snackbar,
-  Container
+  Container,
+  CircularProgress
 } from "@material-ui/core";
 import {
   AccountCircleTwoTone,
@@ -49,29 +50,40 @@ const useStyles = makeStyles({
   }
 });
 
+enum SubmitButtonState {
+  Enabled,
+  Loading,
+  Disabled
+}
+
 const AddMemberPage = () => {
   const [name, setName] = useState("");
+  const nameIsEmpty = name.trim() === "";
+  const [nameError, setNameError] = useState(false);
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const [registrationDate, setRegistrationDate] = useState(
     new Date().toISOString().split("T")[0]
   );
   const [moreDetails, setMoreDetails] = useState("");
 
+  const [submitButtonState, setSubmitButtonState] = useState(
+    SubmitButtonState.Enabled
+  );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [key, setKey] = useState<string | null>(null);
 
   const classes = useStyles();
 
-  const handleRegistrationDateChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRegistrationDate(event.target.value);
+  const setGenericErrorMessage = () => {
+    setSubmitButtonState(SubmitButtonState.Enabled);
+    setErrorMessage("חלה שגיאה בהוספת החבר.ה החדש.ה, נסו שוב מאוחר יותר.");
   };
 
-  const setGenericErrorMessage = () =>
-    setErrorMessage("חלה שגיאה בהוספת החבר.ה החדש.ה, נסו שוב מאוחר יותר.");
-
   const create = async () => {
+    if (nameIsEmpty) return setNameError(true);
+    setSubmitButtonState(SubmitButtonState.Loading);
+
     const generateNewKey = () => createRandomString(64);
     const isKeyAlreadyUsed = async (key: string) => {
       try {
@@ -111,6 +123,7 @@ const AddMemberPage = () => {
           phoneNumber,
           moreDetails
         });
+      setSubmitButtonState(SubmitButtonState.Disabled);
     } catch {
       return setGenericErrorMessage();
     }
@@ -134,7 +147,14 @@ const AddMemberPage = () => {
                   <TextField
                     label="שם החבר.ה"
                     value={name}
-                    onChange={event => setName(event.target.value)}
+                    error={nameError}
+                    helperText={nameError && "אי אפשר להוסיף חבר.ה בלי שם"}
+                    onChange={event => {
+                      const newName = event.target.value;
+                      setSubmitButtonState(SubmitButtonState.Enabled);
+                      setNameError(nameError && newName.trim() === "");
+                      setName(newName);
+                    }}
                     variant="filled"
                     InputProps={{
                       startAdornment: (
@@ -151,7 +171,10 @@ const AddMemberPage = () => {
                     value={phoneNumber}
                     className={classes.ltrTextField}
                     type="tel"
-                    onChange={event => setPhoneNumber(event.target.value)}
+                    onChange={event => {
+                      setSubmitButtonState(SubmitButtonState.Enabled);
+                      setPhoneNumber(event.target.value);
+                    }}
                     variant="filled"
                     InputProps={{
                       startAdornment: (
@@ -167,7 +190,10 @@ const AddMemberPage = () => {
                     label="תאריך הצטרפות"
                     defaultValue={registrationDate}
                     type="date"
-                    onChange={handleRegistrationDateChange}
+                    onChange={event => {
+                      setSubmitButtonState(SubmitButtonState.Enabled);
+                      setRegistrationDate(event.target.value);
+                    }}
                     variant="filled"
                     InputProps={{
                       startAdornment: (
@@ -186,7 +212,10 @@ const AddMemberPage = () => {
                     multiline
                     rows={7}
                     value={moreDetails}
-                    onChange={event => setMoreDetails(event.target.value)}
+                    onChange={event => {
+                      setSubmitButtonState(SubmitButtonState.Enabled);
+                      setMoreDetails(event.target.value);
+                    }}
                     variant="filled"
                   />
                 </Box>
@@ -198,7 +227,17 @@ const AddMemberPage = () => {
               mt={2}
               mr={1}
             >
-              <Button variant="contained" color="primary" onClick={create}>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={submitButtonState === SubmitButtonState.Disabled}
+                onClick={create}
+              >
+                {submitButtonState === SubmitButtonState.Loading && (
+                  <Box mr={1}>
+                    <CircularProgress size={12} thickness={4} color="inherit" />
+                  </Box>
+                )}
                 יצירה
               </Button>
             </Box>

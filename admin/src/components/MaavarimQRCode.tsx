@@ -2,7 +2,7 @@ import React from "react";
 import config from "../config";
 import QRCode from "./QRCode";
 
-const QR_CODE_DIM = 246;
+const QR_CODE_DIM = 524;
 const QUIET_ZONE = 12;
 
 export const qrCodeConfig = (key: string) => ({

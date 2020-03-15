@@ -1,4 +1,4 @@
-$QR_CODE_DIM: 246;
+$QR_CODE_DIM: 250;
 
 .loading {
   position: absolute;
@@ -19,6 +19,11 @@ $QR_CODE_DIM: 246;
   overflow: hidden;
   height: $QR_CODE_DIM * 1px;
   width: $QR_CODE_DIM * 1px;
+
+  img {
+    height: $QR_CODE_DIM * 1px;
+    width: $QR_CODE_DIM * 1px;
+  }
 
   &:hover {
     .hoverArea {
