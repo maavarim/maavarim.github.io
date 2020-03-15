@@ -122,7 +122,6 @@ const AddMemberPage = () => {
               className={classes.flex}
               justifyContent="flex-end"
               mt={2}
-              mr={1}
             >
               <Button
                 variant="contained"
