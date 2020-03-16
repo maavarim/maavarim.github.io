@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "https://maavarim.github.io/admin/precache-manifest.fbf1ee3a427ef1a81596dfc908cdeae7.js"
+  "https://maavarim.github.io/admin/precache-manifest.5b6626437899eb55725d6834a5543b75.js"
 );
 
 self.addEventListener('message', (event) => {
