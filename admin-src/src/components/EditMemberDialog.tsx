@@ -40,7 +40,7 @@ const EditMemberDialog = ({
   deleteCallback
 }: EditMemberDialogProps) => {
   const [editedMember, setEditedMember] = useState<Member | null>(null);
-  
+
   const [successEditSnackbarIsOpen, setSuccessEditSnackbarIsOpen] = useState(
     false
   );
@@ -110,7 +110,7 @@ const EditMemberDialog = ({
           )}
         </DialogContentWithoutPadding>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} variant="outlined">
             ביטול
           </Button>
           <DeleteButton
