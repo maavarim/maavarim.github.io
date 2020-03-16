@@ -13,7 +13,7 @@ import {
   createStyles
 } from "@material-ui/core/styles";
 
-import { DrawerAction, Drawer } from "./Drawer";
+import { DrawerAction, Drawer } from "./components/Drawer";
 import LoginPage from "./pages/LoginPage";
 import PageName from "./pages/PageName";
 import AddMemberPage from "./pages/AddMemberPage";
