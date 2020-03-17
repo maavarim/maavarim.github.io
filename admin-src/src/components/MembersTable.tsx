@@ -21,10 +21,12 @@ import {
   styled
 } from "@material-ui/core";
 import { EditTwoTone } from "@material-ui/icons";
+import QrCodeIcon from "./custom-icons/QrCodeIcon";
 import firebase from "../Firebase";
 import { formatDate } from "../utils";
 import Member from "../Member";
 import EditMemberDialog from "./EditMemberDialog";
+import DisplayQRCodeDialog from "./DisplayQRCodeDialog";
 
 const useStyles = makeStyles({
   table: {
@@ -228,6 +230,15 @@ const MembersTable = ({ query }: MembersTableProps) => {
       });
   };
 
+  const [
+    memberToDisplayQRCode,
+    setMemberToDisplayQRCode
+  ] = useState<Member | null>(null);
+  const [
+    isDisplayQRCodeDialogOpened,
+    setIsDisplayQRCodeDialogOpened
+  ] = useState(false);
+
   return (
     <Fragment>
       <EditMemberDialog
@@ -238,13 +249,18 @@ const MembersTable = ({ query }: MembersTableProps) => {
         editCallback={updateMember}
         deleteCallback={deleteMember}
       />
+      <DisplayQRCodeDialog
+        open={isDisplayQRCodeDialogOpened}
+        onClose={() => setIsDisplayQRCodeDialogOpened(false)}
+        member={memberToDisplayQRCode}
+      />
       {members !== null && (
         <Fragment>
           <TableContainer component="div">
             <Table
               stickyHeader
               className={classes.table}
-              aria-label="simple table"
+              aria-label="טבלת חברים"
             >
               <TableHead>
                 <TableRow>
@@ -253,7 +269,7 @@ const MembersTable = ({ query }: MembersTableProps) => {
                   <TableCellBold>טלפון</TableCellBold>
                   <TableCellBold>פרטים נוספים</TableCellBold>
                   <TableCellBold align="center">סטטוס מינוי</TableCellBold>
-                  <TableCellBold align="center">עריכה</TableCellBold>
+                  <TableCellBold align="center">פעולות</TableCellBold>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -279,7 +295,18 @@ const MembersTable = ({ query }: MembersTableProps) => {
                     </TableCell>
                     <TableCell align="center" style={{ padding: 0 }}>
                       <IconButton
+                        aria-label="צפייה ב-qr code"
+                        style={{ marginRight: ".25em" }}
+                        onClick={() => {
+                          setMemberToDisplayQRCode(member);
+                          setIsDisplayQRCodeDialogOpened(true);
+                        }}
+                      >
+                        <QrCodeIcon />
+                      </IconButton>{" "}
+                      <IconButton
                         aria-label="עריכה"
+                        style={{ marginRight: "-.25em", marginLeft: ".25em" }}
                         onClick={() => {
                           setMemberToEdit(member);
                           setIsEditMemberDialogOpened(true);
