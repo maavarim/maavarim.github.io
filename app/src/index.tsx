@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import ThemedApp from './ThemedApp';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<ThemedApp />, document.getElementById('root'));
