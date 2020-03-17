@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "cd admin && yarn build && mv build/ ../dist/admin && cd ../app && yarn build && mv build/ ../dist/app && cd ../ && cp public/* dist && gh-pages -d dist -b master && rm -rf dist"
+    "deploy": "cd admin && yarn build && mv build/ ../dist/admin && cd ../ && cp public/* dist && gh-pages -d dist -b master && rm -rf dist"
   },
   "repository": {
     "type": "git",
