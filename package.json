@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-admin": "PUBLIC_URL=/admin/ npm run --prefix admin build && mv admin/build/ dist/admin",
-    "deploy": "rm -rf dist && mkdir dist && npm run build-admin && cp public/* dist && gh-pages -d dist -b master && rm -rf dist"
+    "deploy": "rm -rf dist && mkdir dist && npm run build-admin && cp -r public/* dist && gh-pages -d dist -b master && rm -rf dist"
   },
   "repository": {
     "type": "git",
