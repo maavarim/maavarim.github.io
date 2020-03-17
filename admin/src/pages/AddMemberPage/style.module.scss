@@ -1,0 +1,25 @@
+.successMessageContainer {
+  display: flex;
+  padding-bottom: 16px !important;
+}
+
+.illustration {
+  left: 0;
+  bottom: 0;
+  height: 75%;
+  z-index: 0;
+  position: absolute;
+}
+
+@media only screen and (max-width: 1260px) {
+  .illustration {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  .successMessageContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+}
