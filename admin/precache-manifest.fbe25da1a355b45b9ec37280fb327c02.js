@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "3c653670f1c56a2242551395d3827cc1",
+    "revision": "14f44d27e5575972f36c8cf4b0624183",
     "url": "https://maavarim.github.io/admin/index.html"
   },
   {
-    "revision": "63e8baf0c326c49d343d",
+    "revision": "2dc15cda370f89f73568",
     "url": "https://maavarim.github.io/admin/static/css/main.3cedba41.chunk.css"
   },
   {
-    "revision": "b0a84b647008db71f07b",
-    "url": "https://maavarim.github.io/admin/static/js/2.8d8076d3.chunk.js"
+    "revision": "37ea8e6784e9c2497f78",
+    "url": "https://maavarim.github.io/admin/static/js/2.b4558537.chunk.js"
   },
   {
     "revision": "b68ea9bfcdfe88fd25eac9df29279526",
-    "url": "https://maavarim.github.io/admin/static/js/2.8d8076d3.chunk.js.LICENSE.txt"
+    "url": "https://maavarim.github.io/admin/static/js/2.b4558537.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "63e8baf0c326c49d343d",
-    "url": "https://maavarim.github.io/admin/static/js/main.6dc8cf45.chunk.js"
+    "revision": "2dc15cda370f89f73568",
+    "url": "https://maavarim.github.io/admin/static/js/main.9826557c.chunk.js"
   },
   {
     "revision": "c469c28bf7bb92527c2e",
