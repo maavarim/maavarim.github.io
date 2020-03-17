@@ -7,10 +7,10 @@ import {
 import {
   PersonAddTwoTone,
   ListAltTwoTone,
-  EditTwoTone,
   LockTwoTone,
   LockOpenTwoTone
 } from "@material-ui/icons";
+import SearchContactTwoTone from "../components/custom-icons/SearchContactTwoToneIcon";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -62,9 +62,9 @@ export const Drawer = ({ isLoggedIn, perform, ...props }: DrawerProps) => {
           title: "כל החברים.ות"
         },
         {
-          icon: <EditTwoTone />,
+          icon: <SearchContactTwoTone />,
           action: DrawerAction.Serach,
-          title: "חיפוש ועריכה"
+          title: "חיפוש חברים.ות"
         },
         null,
         { icon: <LockTwoTone />, action: DrawerAction.Logout, title: "התנתקות" }
