@@ -1,0 +1,23 @@
+{
+  "name": "maavarim",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "cd admin-src && yarn build && mv build/ ../dist/admin && cd ../app-src && yarn build && mv build/ ../dist/app && cd ../ && cp public/* dist && gh-pages -d dist -b master && rm -rf dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maavarim/maavarim.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maavarim/maavarim.github.io/issues"
+  },
+  "homepage": "https://github.com/maavarim/maavarim.github.io#readme",
+  "dependencies": {
+    "gh-pages": "^2.2.0"
+  }
+}
