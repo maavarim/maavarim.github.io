@@ -1,0 +1,66 @@
+.qrCode {
+  display: inline-block;
+  position: relative;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.qrCode:hover .hoverArea {
+  opacity: 1 !important;
+}
+
+.hoverArea {
+  top: 0 !important;
+  right: 0 !important;
+  color: white !important;
+  font-family: "Assistant", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+  font-weight: bold !important;
+  font-size: 1.2em !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-box-direction: normal !important;
+      -ms-flex-direction: column !important;
+          flex-direction: column !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  -webkit-transition: all 0.2s ease !important;
+  transition: all 0.2s ease !important;
+  -webkit-box-align: center !important;
+      -ms-flex-align: center !important;
+          align-items: center !important;
+  -webkit-box-pack: center !important;
+      -ms-flex-pack: center !important;
+          justify-content: center !important;
+  background-color: rgba(0, 0, 0, 0.75) !important;
+}
+
+.illustration {
+  left: 0;
+  bottom: 0;
+  height: 75%;
+  z-index: 0;
+  position: absolute;
+}
+
+@media only screen and (max-width: 1260px) {
+  .illustration {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  .successMessageContainer {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+}
+/*# sourceMappingURL=AddMemberPage.module.css.map */

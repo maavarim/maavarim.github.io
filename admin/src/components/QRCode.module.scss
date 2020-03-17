@@ -1,0 +1,54 @@
+$QR_CODE_DIM: 250;
+
+.loading {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wEEEAAMAAwADAAMAA0ADAAOAA8ADwAOABMAFQASABUAEwAcABoAGAAYABoAHAArAB4AIQAeACEAHgArAEEAKAAvACgAKAAvACgAQQA5AEUAOAA0ADgARQA5AGcAUQBHAEcAUQBnAHcAZABeAGQAdwCQAIAAgACQALUArAC1AOwA7AE+EQAMAAwADAAMAA0ADAAOAA8ADwAOABMAFQASABUAEwAcABoAGAAYABoAHAArAB4AIQAeACEAHgArAEEAKAAvACgAKAAvACgAQQA5AEUAOAA0ADgARQA5AGcAUQBHAEcAUQBnAHcAZABeAGQAdwCQAIAAgACQALUArAC1AOwA7AE+/8IAEQgAMgAyAwEiAAIRAQMRAf/EABkAAAIDAQAAAAAAAAAAAAAAAAMEAAECBf/aAAgBAQAAAABfsi1OY8YlDIMdsbWaTrZOkLHNs2C42LCHTFTCZquSSf/EABcBAAMBAAAAAAAAAAAAAAAAAAABAgP/2gAIAQIQAAAA2C1no4C0D//EABcBAQEBAQAAAAAAAAAAAAAAAAABAwL/2gAIAQMQAAAAvUue2XcKH//EACwQAAICAgECBAUEAwAAAAAAAAECAxEAIRIEQRATIjEyUWFxoSAjgZHR4fH/2gAIAQEAAT8AmmmExVSatgSGUcKWxo7NnBFXxK33GMhjXkyuRV6FnEQMpJSUEHYIo55TURRssK0dDOrkljndVsLTWeSjhSgjR2bwe2IWUxmrth9xvEJ86iTxN9+4OdTGoBA5NyxI1HIKSWvdkm/7+WSp5SBSCSG5VfbGtn4bur0d/nwR4xIgeq5CrPfIQkslg2hJ/wB0c60GAcmFJVtiAdSSFa1DUa3rJhHHHW6Le4OhiTxSXxdSa8FRnaMgH0uCCMhpCYybtyfUO7HJZkp4ZQ3CRTsAErgn6WNm8uNnZ29yoWu3atZLYJIogkj6DIYWjYetrCcQKB14Q7ZRewRWrxpuJdgVFt7ZJLI7USS5Hy0KxgzP6G+Ej8brJWdgS3z+5/5h3VE0FulIvwk6ueOXirjiC1kso4UtjRG7OJt2DAAXQH+Mni5wyBT/AAcggP7mlAJBpexrEdvUGBu9kaGQdKY5V5iMEx1rv9T4UP1//8QAHBEAAQUAAwAAAAAAAAAAAAAAAQACEBEhMEFR/9oACAECAQE/ANtajcNALlZ8TgMjvg//xAAcEQEAAgIDAQAAAAAAAAAAAAABABECEgMQITD/2gAIAQMBAT8AWpTcvrkUPCUbhMV2zK8H5f/Z");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-size: cover;
+}
+
+.qrCode {
+  display: inline-block;
+  position: relative;
+  border-radius: 3px;
+  overflow: hidden;
+  height: $QR_CODE_DIM * 1px;
+  width: $QR_CODE_DIM * 1px;
+
+  img {
+    height: $QR_CODE_DIM * 1px;
+    width: $QR_CODE_DIM * 1px;
+  }
+
+  &:hover {
+    .hoverArea {
+      opacity: 1 !important;
+    }
+  }
+}
+
+.hoverArea {
+  top: 0 !important;
+  right: 0 !important;
+  color: white !important;
+  font-family: "Assistant", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol" !important;
+  font-weight: bold !important;
+  font-size: 1.2em !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  transition: all 0.2s ease !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: rgba(0, 0, 0, 0.75) !important;
+}
