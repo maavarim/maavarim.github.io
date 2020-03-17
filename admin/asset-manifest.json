@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "https://maavarim.github.io/admin/static/css/main.3cedba41.chunk.css",
-    "main.js": "https://maavarim.github.io/admin/static/js/main.4a950d11.chunk.js",
-    "main.js.map": "https://maavarim.github.io/admin/static/js/main.4a950d11.chunk.js.map",
-    "runtime-main.js": "https://maavarim.github.io/admin/static/js/runtime-main.a761ffea.js",
-    "runtime-main.js.map": "https://maavarim.github.io/admin/static/js/runtime-main.a761ffea.js.map",
-    "static/js/2.1309972e.chunk.js": "https://maavarim.github.io/admin/static/js/2.1309972e.chunk.js",
-    "static/js/2.1309972e.chunk.js.map": "https://maavarim.github.io/admin/static/js/2.1309972e.chunk.js.map",
-    "index.html": "https://maavarim.github.io/admin/index.html",
-    "precache-manifest.54c0f3f87a2de0f7129057ec1ab31da7.js": "https://maavarim.github.io/admin/precache-manifest.54c0f3f87a2de0f7129057ec1ab31da7.js",
-    "service-worker.js": "https://maavarim.github.io/admin/service-worker.js",
-    "static/css/main.3cedba41.chunk.css.map": "https://maavarim.github.io/admin/static/css/main.3cedba41.chunk.css.map",
-    "static/js/2.1309972e.chunk.js.LICENSE.txt": "https://maavarim.github.io/admin/static/js/2.1309972e.chunk.js.LICENSE.txt",
-    "static/media/SuccessIllustration.svg": "https://maavarim.github.io/admin/static/media/SuccessIllustration.565a7ac6.svg"
+    "main.css": "/admin/static/css/main.3cedba41.chunk.css",
+    "main.js": "/admin/static/js/main.21a19bfd.chunk.js",
+    "main.js.map": "/admin/static/js/main.21a19bfd.chunk.js.map",
+    "runtime-main.js": "/admin/static/js/runtime-main.be4a11e5.js",
+    "runtime-main.js.map": "/admin/static/js/runtime-main.be4a11e5.js.map",
+    "static/js/2.3c15fb4d.chunk.js": "/admin/static/js/2.3c15fb4d.chunk.js",
+    "static/js/2.3c15fb4d.chunk.js.map": "/admin/static/js/2.3c15fb4d.chunk.js.map",
+    "index.html": "/admin/index.html",
+    "precache-manifest.58af84937bfe1e3ad053ef26167f585d.js": "/admin/precache-manifest.58af84937bfe1e3ad053ef26167f585d.js",
+    "service-worker.js": "/admin/service-worker.js",
+    "static/css/main.3cedba41.chunk.css.map": "/admin/static/css/main.3cedba41.chunk.css.map",
+    "static/js/2.3c15fb4d.chunk.js.LICENSE.txt": "/admin/static/js/2.3c15fb4d.chunk.js.LICENSE.txt",
+    "static/media/SuccessIllustration.svg": "/admin/static/media/SuccessIllustration.565a7ac6.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.a761ffea.js",
-    "static/js/2.1309972e.chunk.js",
+    "static/js/runtime-main.be4a11e5.js",
+    "static/js/2.3c15fb4d.chunk.js",
     "static/css/main.3cedba41.chunk.css",
-    "static/js/main.4a950d11.chunk.js"
+    "static/js/main.21a19bfd.chunk.js"
   ]
 }
