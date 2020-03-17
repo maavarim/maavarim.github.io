@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-admin": "PUBLIC_URL=/admin/ npm run --prefix admin build && mv build/ ../dist/admin",
-    "build-app": "PUBLIC_URL=/app/ npm run --prefix app build && mv build/ ../dist/app",
+    "build-admin": "PUBLIC_URL=/admin/ npm run --prefix admin build && mv admin/build/ dist/admin",
+    "build-app": "PUBLIC_URL=/app/ npm run --prefix app build && mv app/build/ dist/app",
     "deploy": "rm -rf dist && mkdir dist && npm run build-admin && npm run build-app && cp public/* dist && gh-pages -d dist -b master && rm -rf dist"
   },
   "repository": {
