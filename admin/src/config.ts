@@ -1,4 +1,4 @@
 export default {
   DEBUG: false,
-  URL_BASE: "http://maavarim.github.io/?key="
+  URL_BASE: "http://maavarim.github.io/club/?key="
 };
