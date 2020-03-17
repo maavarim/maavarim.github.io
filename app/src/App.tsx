@@ -59,11 +59,15 @@ function App() {
       <CssBaseline />
       <AppBar position="static">
         <Toolbar>
-          <img src={LogoJpeg} className={classes.logoImage} />
-          <Typography variant="h6" className={classes.title}>
-            מעברים – חיפוש אנשי.ות מקצוע
-          </Typography>
-          <Button color="inherit">התחברות</Button>
+          <Container maxWidth="md">
+            <Box display="flex" alignItems="center">
+              <img src={LogoJpeg} className={classes.logoImage} />
+              <Typography variant="h6" className={classes.title}>
+                מעברים – חיפוש אנשי.ות מקצוע
+              </Typography>
+              <Button color="inherit">התחברות</Button>
+            </Box>
+          </Container>
         </Toolbar>
       </AppBar>
       <main>
