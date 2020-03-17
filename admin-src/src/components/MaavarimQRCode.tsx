@@ -9,7 +9,7 @@ export const qrCodeConfig = (key: string) => ({
   text: config.URL_BASE + key,
   height: QR_CODE_DIM - QUIET_ZONE * 2,
   width: QR_CODE_DIM - QUIET_ZONE * 2,
-  backgroundImage: "/logo.jpg",
+  backgroundImage: `${process.env.PUBLIC_URL}/logo.jpg`,
   autoColor: true,
   backgroundImageAlpha: 0.75,
   dotScale: 0.5,
