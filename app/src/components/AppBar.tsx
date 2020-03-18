@@ -9,17 +9,33 @@ import {
   Box
 } from "@material-ui/core";
 import LogoJpeg from "../img/Logo.jpeg";
+import LoggedInUser from "../types/LoggedInUser";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   appBarTitle: {
     flexGrow: 1
   },
   logoImage: {
     height: "3em"
+  },
+  profilePhoto: {
+    height: "2em",
+    borderRadius: "50%",
+    marginInlineEnd: `${theme.spacing(1)}px`
   }
-});
+}));
 
-function AppBar() {
+interface AppBarProps {
+  onLoginButtonClick: () => void;
+  onLogoutButtonClick: () => void;
+  loggedInUser: LoggedInUser | null;
+}
+
+function AppBar({
+  onLoginButtonClick,
+  onLogoutButtonClick,
+  loggedInUser
+}: AppBarProps) {
   const classes = useStyles();
 
   return (
@@ -31,7 +47,16 @@ function AppBar() {
             <Typography variant="h6" className={classes.appBarTitle}>
               מעברים – חיפוש אנשי.ות מקצוע
             </Typography>
-            <Button color="inherit">התחברות</Button>
+            {loggedInUser && (
+              <Button color="inherit" onClick={onLogoutButtonClick}>
+                התנתקות
+              </Button>
+            )}
+            {loggedInUser === null && (
+              <Button color="inherit" onClick={onLoginButtonClick}>
+                התחברות
+              </Button>
+            )}
           </Box>
         </Container>
       </Toolbar>

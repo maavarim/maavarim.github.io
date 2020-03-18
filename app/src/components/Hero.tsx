@@ -5,7 +5,7 @@ import {
   makeStyles,
   Box,
   ButtonBase,
-  Paper,
+  Paper
 } from "@material-ui/core";
 
 const GRADIENT =
@@ -42,7 +42,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Hero() {
+interface HeroProps {
+  onLoginButtonClick: () => void;
+}
+
+function Hero({ onLoginButtonClick }: HeroProps) {
   const classes = useStyles();
 
   return (
@@ -63,7 +67,10 @@ function Hero() {
           אנחנו מזמינות אתכםן להרשם ולהשאיר משוב, לדרג ולשתף חוויות.
           <br />
           מכיריםות מישהו.י שלא ברשימה?{" "}
-          <ButtonBase className={classes.cta}>התחברו</ButtonBase> והוסיפו אותםן!
+          <ButtonBase className={classes.cta} onClick={onLoginButtonClick}>
+            התחברו
+          </ButtonBase>{" "}
+          והוסיפו אותםן!
         </Typography>
       </Container>
       <Box className={classes.leftGradient} />

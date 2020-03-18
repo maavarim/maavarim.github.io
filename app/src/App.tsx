@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { makeStyles, CssBaseline } from "@material-ui/core";
+import { CssBaseline } from "@material-ui/core";
 import AppBar from "./components/AppBar";
 import Hero from "./components/Hero";
 import SearchContainer from "./components/SearchContainer";
+import LoginDialog from "./components/LoginDialog";
 import SearchFilter from "./types/SearchFilter";
-
-const useStyles = makeStyles(theme => ({}));
+import LoggedInUser from "./types/LoggedInUser";
+import { logout } from "./utils/firebaseLogin";
 
 const FILTERS: SearchFilter[] = [
   {
@@ -59,16 +60,26 @@ const FILTERS: SearchFilter[] = [
 ];
 
 function App() {
-  const classes = useStyles();
+  const [loggedInUser, setLoggedInUser] = useState<LoggedInUser | null>(null);
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
 
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar />
+      <AppBar
+        loggedInUser={loggedInUser}
+        onLoginButtonClick={() => setIsLoginDialogOpen(true)}
+        onLogoutButtonClick={() => logout().then(() => setLoggedInUser(null))}
+      />
       <main>
-        <Hero />
+        <Hero onLoginButtonClick={() => setIsLoginDialogOpen(true)} />
         <SearchContainer filters={FILTERS} />
       </main>
+      <LoginDialog
+        open={isLoginDialogOpen}
+        setOpen={setIsLoginDialogOpen}
+        setLoggedInUser={setLoggedInUser}
+      />
     </React.Fragment>
   );
 }
