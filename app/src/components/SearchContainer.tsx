@@ -98,19 +98,16 @@ function SearchContainer({ filters }: SearchContainerProps) {
                         <Select
                           labelId={`select-${filter.firestoreFieldName}`}
                           multiple
-                          renderValue={selected => {
-                            console.log(selected);
-                            console.log(selected as string[]);
-
-                            return (selected as string[])
+                          renderValue={selected =>
+                            (selected as string[])
                               .map(
                                 optionId =>
                                   filter.options.find(
                                     ({ id }) => id === optionId
                                   )?.title ?? ""
                               )
-                              .join(" · ");
-                          }}
+                              .join(" · ")
+                          }
                           value={selectedOptions ?? []}
                           onChange={handleChange(filter)}
                         >
