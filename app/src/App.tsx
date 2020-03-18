@@ -72,7 +72,11 @@ function App() {
         onLogoutButtonClick={() => logout().then(() => setLoggedInUser(null))}
       />
       <main>
-        <Hero onLoginButtonClick={() => setIsLoginDialogOpen(true)} />
+        <Hero
+          isLoggedIn={loggedInUser !== null}
+          onLoginButtonClick={() => setIsLoginDialogOpen(true)}
+          onAddButtonClick={console.log}
+        />
         <SearchContainer filters={FILTERS} />
       </main>
       <LoginDialog

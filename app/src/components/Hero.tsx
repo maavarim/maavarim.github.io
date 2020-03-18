@@ -44,9 +44,11 @@ const useStyles = makeStyles(theme => ({
 
 interface HeroProps {
   onLoginButtonClick: () => void;
+  onAddButtonClick: () => void;
+  isLoggedIn: boolean;
 }
 
-function Hero({ onLoginButtonClick }: HeroProps) {
+function Hero({ onLoginButtonClick, onAddButtonClick, isLoggedIn }: HeroProps) {
   const classes = useStyles();
 
   return (
@@ -61,17 +63,41 @@ function Hero({ onLoginButtonClick }: HeroProps) {
         >
           ברוכות הבאים למערכת אנשי.ות המקצוע של הקהילה הטרנסית
         </Typography>
-        <Typography variant="h6" align="center" color="textSecondary" paragraph>
-          כאן תוכלו למצוא מגוון של אנשות מקצוע, מומחים, רופאות ומטפלים.
-          <br />
-          אנחנו מזמינות אתכםן להרשם ולהשאיר משוב, לדרג ולשתף חוויות.
-          <br />
-          מכיריםות מישהו.י שלא ברשימה?{" "}
-          <ButtonBase className={classes.cta} onClick={onLoginButtonClick}>
-            התחברו
-          </ButtonBase>{" "}
-          והוסיפו אותםן!
-        </Typography>
+        {isLoggedIn ? (
+          <Typography
+            variant="h6"
+            align="center"
+            color="textSecondary"
+            paragraph
+          >
+            כאן תוכלו למצוא מגוון של אנשות מקצוע, מומחים, רופאות ומטפלים.
+            <br />
+            אנחנו מזמינות אתכםן להשאיר משוב, לדרג ולשתף חוויות.
+            <br />
+            מכיריםות מישהו.י שלא ברשימה?{" "}
+            <ButtonBase className={classes.cta} onClick={onAddButtonClick}>
+              הוסיפו
+            </ButtonBase>{" "}
+            אותםן!
+          </Typography>
+        ) : (
+          <Typography
+            variant="h6"
+            align="center"
+            color="textSecondary"
+            paragraph
+          >
+            כאן תוכלו למצוא מגוון של אנשות מקצוע, מומחים, רופאות ומטפלים.
+            <br />
+            אנחנו מזמינות אתכםן להרשם ולהשאיר משוב, לדרג ולשתף חוויות.
+            <br />
+            מכיריםות מישהו.י שלא ברשימה?{" "}
+            <ButtonBase className={classes.cta} onClick={onLoginButtonClick}>
+              התחברו
+            </ButtonBase>{" "}
+            והוסיפו אותםן!
+          </Typography>
+        )}
       </Container>
       <Box className={classes.leftGradient} />
     </Paper>
