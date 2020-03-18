@@ -11,8 +11,14 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Checkbox,
+  ListItemText,
+  InputAdornment
 } from "@material-ui/core";
+import SearchFilter from "../types/SearchFilter";
+import { splitIntoPairs } from "../utils/ArrayUtils";
+import HomeSearchIcon from "./custom-icons/HomeSearchIcon";
 
 const useStyles = makeStyles(theme => ({
   searchContainer: {
@@ -26,8 +32,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function SearchContainer() {
+interface SearchContainerProps {
+  filters: SearchFilter[];
+}
+
+function SearchContainer({ filters }: SearchContainerProps) {
   const classes = useStyles();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState(
+    new Map<string, string[]>() // filter.id => ids of selected options
+  );
+
+  const handleChange = (filter: SearchFilter) => (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    const selectedOptions = event.target.value as string[];
+    console.log(selectedOptions);
+    const updatedSelectedFilters = new Map(selectedFilters);
+    updatedSelectedFilters.set(filter.id, selectedOptions);
+    setSelectedFilters(updatedSelectedFilters);
+  };
 
   return (
     <Container maxWidth="md" className={classes.searchContainer}>
@@ -46,66 +70,69 @@ function SearchContainer() {
               <Grid item xs={12}>
                 <TextField
                   label="חיפוש חופשי"
-                  // value={name}
-                  // error={showErrors && nameError}
-                  // helperText={
-                  //   showErrors && nameError && "אי אפשר להוסיף חבר.ה בלי שם"
-                  // }
-                  // onChange={event => setName(event.target.value)}
+                  value={searchQuery}
+                  onChange={event => setSearchQuery(event.target.value)}
                   color="secondary"
                   variant="filled"
-                  // InputProps={{
-                  //   startAdornment: (
-                  //     <InputAdornment position="start">
-                  //       <AccountCircleTwoTone />
-                  //     </InputAdornment>
-                  //   )
-                  // }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <HomeSearchIcon />
+                      </InputAdornment>
+                    )
+                  }}
                 />
               </Grid>
             </Grid>
-            <Grid item container spacing={1} xs={12}>
-              <Grid item xs={12} md={6}>
-                <FormControl color="secondary" variant="filled">
-                  <InputLabel id="demo-simple-select-filled-label">
-                    מקצוע
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-filled-label"
-                    id="demo-simple-select-filled"
-                    // value={age}
-                    // onChange={handleChange}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
+
+            {splitIntoPairs(filters).map((row, rowIndex) => (
+              <Grid item container spacing={1} xs={12} key={rowIndex}>
+                {row.map((filter: SearchFilter) => {
+                  const selectedOptions = selectedFilters.get(filter.id);
+                  return (
+                    <Grid item xs={12} md={6} key={filter.id}>
+                      <FormControl color="secondary" variant="filled">
+                        <InputLabel id={`select-${filter.firestoreFieldName}`}>
+                          {filter.title}
+                        </InputLabel>
+                        <Select
+                          labelId={`select-${filter.firestoreFieldName}`}
+                          multiple
+                          renderValue={selected => {
+                            console.log(selected);
+                            console.log(selected as string[]);
+
+                            return (selected as string[])
+                              .map(
+                                optionId =>
+                                  filter.options.find(
+                                    ({ id }) => id === optionId
+                                  )?.title ?? ""
+                              )
+                              .join(" · ");
+                          }}
+                          value={selectedOptions ?? []}
+                          onChange={handleChange(filter)}
+                        >
+                          {filter.options.map(option => (
+                            <MenuItem value={option.id} key={option.id}>
+                              <Checkbox
+                                checked={
+                                  selectedOptions?.find(
+                                    id => option.id === id
+                                  ) !== undefined ?? false
+                                }
+                              />
+                              <ListItemText primary={option.title} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  );
+                })}
               </Grid>
-              <Grid item xs={12} md={6}>
-                <FormControl color="secondary" variant="filled">
-                  <InputLabel id="demo-simple-select-filled-label">
-                    התמחות
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-filled-label"
-                    id="demo-simple-select-filled"
-                    // value={age}
-                    // onChange={handleChange}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
+            ))}
           </Grid>
         </CardContent>
       </Card>
