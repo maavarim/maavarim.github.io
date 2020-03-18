@@ -10,7 +10,8 @@ const theme = createMuiTheme(
   {
     direction: "rtl",
     palette: {
-      primary: { main: "#342b40" }
+      primary: { main: "#342b40" },
+      secondary: { main: "#7b1fa2" }
     },
     typography: {
       fontFamily: [
@@ -26,6 +27,9 @@ const theme = createMuiTheme(
         '"Segoe UI Emoji"',
         '"Segoe UI Symbol"'
       ].join(","),
+      h5: {
+        fontWeight: 600
+      },
       button: {
         textTransform: "none"
       }
