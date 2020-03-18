@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   Container,
   AppBar as MuiAppBar,
@@ -28,12 +28,14 @@ const useStyles = makeStyles(theme => ({
 interface AppBarProps {
   onLoginButtonClick: () => void;
   onLogoutButtonClick: () => void;
+  onAdminButtonClick: () => void;
   loggedInUser: LoggedInUser | null;
 }
 
 function AppBar({
   onLoginButtonClick,
   onLogoutButtonClick,
+  onAdminButtonClick,
   loggedInUser
 }: AppBarProps) {
   const classes = useStyles();
@@ -48,9 +50,16 @@ function AppBar({
               מעברים – חיפוש אנשי.ות מקצוע
             </Typography>
             {loggedInUser && (
-              <Button color="inherit" onClick={onLogoutButtonClick}>
-                התנתקות
-              </Button>
+              <Fragment>
+                {loggedInUser?.email?.endsWith("maavarim.org") && (
+                  <Button color="inherit" onClick={onAdminButtonClick}>
+                    ניהול
+                  </Button>
+                )}
+                <Button color="inherit" onClick={onLogoutButtonClick}>
+                  התנתקות
+                </Button>
+              </Fragment>
             )}
             {loggedInUser === null && (
               <Button color="inherit" onClick={onLoginButtonClick}>

@@ -7,6 +7,7 @@ import LoginDialog from "./components/LoginDialog";
 import SearchFilter from "./types/SearchFilter";
 import LoggedInUser from "./types/LoggedInUser";
 import { logout } from "./utils/firebaseLogin";
+import AdminDialogPanel from "./admin";
 
 const FILTERS: SearchFilter[] = [
   {
@@ -62,6 +63,7 @@ const FILTERS: SearchFilter[] = [
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<LoggedInUser | null>(null);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
+  const [isAdminDialogOpen, setIsAdminDialogOpen] = useState(false);
 
   return (
     <React.Fragment>
@@ -70,6 +72,7 @@ function App() {
         loggedInUser={loggedInUser}
         onLoginButtonClick={() => setIsLoginDialogOpen(true)}
         onLogoutButtonClick={() => logout().then(() => setLoggedInUser(null))}
+        onAdminButtonClick={() => setIsAdminDialogOpen(true)}
       />
       <main>
         <Hero
@@ -83,6 +86,10 @@ function App() {
         open={isLoginDialogOpen}
         setOpen={setIsLoginDialogOpen}
         setLoggedInUser={setLoggedInUser}
+      />
+      <AdminDialogPanel
+        open={isAdminDialogOpen}
+        onClose={() => setIsAdminDialogOpen(false)}
       />
     </React.Fragment>
   );
