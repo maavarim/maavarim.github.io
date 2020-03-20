@@ -1,4 +1,4 @@
-import firebase from "./Firebase";
+import firebase from "../firebase";
 
 const signInWith = (provider: firebase.auth.AuthProvider) =>
   new Promise<firebase.auth.UserCredential>((resolve, reject) => {

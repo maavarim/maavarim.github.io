@@ -16,4 +16,8 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+export enum Collection {
+  Filters = "filters"
+}
+
 export default firebase;

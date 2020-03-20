@@ -40,13 +40,13 @@ function SearchContainer({ filters }: SearchContainerProps) {
   const classes = useStyles();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilters, setSelectedFilters] = useState(
-    new Map<string, string[]>() // filter.id => ids of selected options
+    new Map<string, number[]>() // filter.id => indeices of selected options
   );
 
   const handleChange = (filter: SearchFilter) => (
     event: React.ChangeEvent<{ value: unknown }>
   ) => {
-    const selectedOptions = event.target.value as string[];
+    const selectedOptions = event.target.value as number[];
     console.log(selectedOptions);
     const updatedSelectedFilters = new Map(selectedFilters);
     updatedSelectedFilters.set(filter.id, selectedOptions);
@@ -92,35 +92,31 @@ function SearchContainer({ filters }: SearchContainerProps) {
                   return (
                     <Grid item xs={12} md={6} key={filter.id}>
                       <FormControl color="secondary" variant="filled">
-                        <InputLabel id={`select-${filter.firestoreFieldName}`}>
+                        <InputLabel id={`select-${filter.id}`}>
                           {filter.title}
                         </InputLabel>
                         <Select
-                          labelId={`select-${filter.firestoreFieldName}`}
+                          labelId={`select-${filter.id}`}
                           multiple
                           renderValue={selected =>
-                            (selected as string[])
+                            (selected as number[])
                               .map(
-                                optionId =>
-                                  filter.options.find(
-                                    ({ id }) => id === optionId
-                                  )?.title ?? ""
+                                optionIndex => filter.options[optionIndex] ?? ""
                               )
                               .join(" · ")
                           }
                           value={selectedOptions ?? []}
                           onChange={handleChange(filter)}
                         >
-                          {filter.options.map(option => (
-                            <MenuItem value={option.id} key={option.id}>
+                          {filter.options.map((option, optionIndex) => (
+                            <MenuItem value={optionIndex} key={optionIndex}>
                               <Checkbox
                                 checked={
-                                  selectedOptions?.find(
-                                    id => option.id === id
-                                  ) !== undefined ?? false
+                                  (selectedOptions?.indexOf(optionIndex) ??
+                                    -1) > -1
                                 }
                               />
-                              <ListItemText primary={option.title} />
+                              <ListItemText primary={option} />
                             </MenuItem>
                           ))}
                         </Select>

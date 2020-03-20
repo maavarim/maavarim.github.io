@@ -7,15 +7,15 @@ import {
   ButtonProps,
   Snackbar
 } from "@material-ui/core";
-import GoogleIcon from "../../img/GoogleIcon.svg";
-import FacebookIcon from "../../img/FacebookIcon.svg";
+import GoogleIcon from "../img/GoogleIcon.svg";
+import FacebookIcon from "../img/FacebookIcon.svg";
 import {
   signInWithGoogle,
   signInWithFacebook,
   checkIfAlreadyLoggedIn
-} from "../../utils/firebaseLogin";
-import LoggedInUser from "../../types/LoggedInUser";
-import Alert from "../Alert";
+} from "../firebase/auth";
+import LoggedInUser from "../types/LoggedInUser";
+import Alert from "./Alert";
 
 interface LoginButtonProps extends ButtonProps {
   onLogin: (userCredential: firebase.auth.UserCredential) => void;
