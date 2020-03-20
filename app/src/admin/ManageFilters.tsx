@@ -21,7 +21,7 @@ import {
   KeyboardArrowUp
 } from "@material-ui/icons";
 import DeleteButton from "../components/DeleteButton";
-import SearchFilter, { EMPTY_SEARCH_FILTER } from "../types/SearchFilter";
+import SearchFilter, { getEmptySearchFilter } from "../types/SearchFilter";
 import logger from "../utils/logger";
 import {
   getAllSearchFilters,
@@ -115,19 +115,6 @@ const FiltersMangment = () => {
   const classes = useStyles();
   const [existingFilters, setExistingFilters] = useState<SearchFilter[]>([]);
 
-  useEffect(() => {
-    getAllSearchFilters()
-      .then(docs => {
-        const remoteExistingFilters = reduceNulls(
-          docs.map(firebaseDocToSearchFilter)
-        );
-        if (remoteExistingFilters !== null) {
-          setExistingFilters(remoteExistingFilters);
-        }
-      })
-      .catch(logger.error);
-  }, []);
-
   const showErrorMessage = (message: string) => {
     // TODO
     console.log(message);
@@ -176,7 +163,7 @@ const FiltersMangment = () => {
     );
 
   const [newSearchFilter, setNewSearchFilter] = useState<SearchFilter>(
-    EMPTY_SEARCH_FILTER
+    getEmptySearchFilter(existingFilters.length)
   );
 
   const addNewSearchFilterOption = (option: string) =>
@@ -208,10 +195,26 @@ const FiltersMangment = () => {
     createOrUpdateSearchFilter(newSearchFilterWithRealId)
       .then(_ => {
         setExistingFilters([...existingFilters, newSearchFilterWithRealId]);
-        setNewSearchFilter(EMPTY_SEARCH_FILTER);
+        setNewSearchFilter(getEmptySearchFilter(existingFilters.length + 1));
       })
       .catch(() => showErrorMessage("חלה שגיאה, נסו שוב."));
   };
+
+  useEffect(() => {
+    getAllSearchFilters()
+      .then(docs => {
+        const remoteExistingFilters = reduceNulls(
+          docs.map(firebaseDocToSearchFilter)
+        );
+        if (remoteExistingFilters !== null) {
+          setExistingFilters(remoteExistingFilters);
+          setNewSearchFilter(
+            getEmptySearchFilter(remoteExistingFilters.length)
+          );
+        }
+      })
+      .catch(logger.error);
+  }, []);
 
   return (
     <Fragment>

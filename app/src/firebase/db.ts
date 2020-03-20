@@ -8,6 +8,7 @@ export const getAllSearchFilters = () =>
     firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[]
   >((resolve, reject) => {
     db.collection(Collection.Filters)
+      .orderBy("order")
       .get()
       .then(({ docs }) => resolve(docs))
       .catch(reject);
