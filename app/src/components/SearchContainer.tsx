@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import {
   Container,
   Typography,
@@ -23,6 +23,7 @@ import { getAllSearchFilters } from "../firebase/db";
 import { reduceNulls } from "../utils/ArrayUtils";
 import { firebaseDocToSearchFilter } from "../converters";
 import logger from "../utils/logger";
+import LoadingBackdrop from "./LoadingBackdrop";
 
 const useStyles = makeStyles(theme => ({
   searchContainer: {
@@ -70,83 +71,86 @@ function SearchContainer() {
   }, []);
 
   return (
-    <Container maxWidth="md" className={classes.searchContainer}>
-      <Card>
-        <CardContent>
-          <Box mb={2}>
-            <Typography variant="h5" align="center" color="textPrimary">
-              חיפוש אנשי.ות מקצוע
-            </Typography>
-            <Typography align="center" color="textSecondary" gutterBottom>
-              חפשו בחיפוש חופשי או סננו לפי השדות
-            </Typography>
-          </Box>
-          <Grid container spacing={1} className={classes.fieldsContainer}>
-            <Grid item container spacing={1} xs={12}>
-              <Grid item xs={12}>
-                <TextField
-                  label="חיפוש חופשי"
-                  value={searchQuery}
-                  onChange={event => setSearchQuery(event.target.value)}
-                  color="secondary"
-                  variant="filled"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <HomeSearchIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                />
-              </Grid>
-            </Grid>
-            {searchFilters !== null &&
-              splitIntoPairs(searchFilters).map((row, rowIndex) => (
-                <Grid item container spacing={1} xs={12} key={rowIndex}>
-                  {row.map((filter: SearchFilter) => {
-                    const selectedOptions = selectedFilters.get(filter.id);
-                    return (
-                      <Grid item xs={12} md={6} key={filter.id}>
-                        <FormControl color="secondary" variant="filled">
-                          <InputLabel id={`select-${filter.id}`}>
-                            {filter.title}
-                          </InputLabel>
-                          <Select
-                            labelId={`select-${filter.id}`}
-                            multiple
-                            renderValue={selected =>
-                              (selected as number[])
-                                .map(
-                                  optionIndex =>
-                                    filter.options[optionIndex] ?? ""
-                                )
-                                .join(" · ")
-                            }
-                            value={selectedOptions ?? []}
-                            onChange={handleChange(filter)}
-                          >
-                            {filter.options.map((option, optionIndex) => (
-                              <MenuItem value={optionIndex} key={optionIndex}>
-                                <Checkbox
-                                  checked={
-                                    (selectedOptions?.indexOf(optionIndex) ??
-                                      -1) > -1
-                                  }
-                                />
-                                <ListItemText primary={option} />
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                    );
-                  })}
+    <Fragment>
+      <LoadingBackdrop open={searchFilters === null} />
+      <Container maxWidth="md" className={classes.searchContainer}>
+        <Card>
+          <CardContent>
+            <Box mb={2}>
+              <Typography variant="h5" align="center" color="textPrimary">
+                חיפוש אנשי.ות מקצוע
+              </Typography>
+              <Typography align="center" color="textSecondary" gutterBottom>
+                חפשו בחיפוש חופשי או סננו לפי השדות
+              </Typography>
+            </Box>
+            <Grid container spacing={1} className={classes.fieldsContainer}>
+              <Grid item container spacing={1} xs={12}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="חיפוש חופשי"
+                    value={searchQuery}
+                    onChange={event => setSearchQuery(event.target.value)}
+                    color="secondary"
+                    variant="filled"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <HomeSearchIcon />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
                 </Grid>
-              ))}
-          </Grid>
-        </CardContent>
-      </Card>
-    </Container>
+              </Grid>
+              {searchFilters !== null &&
+                splitIntoPairs(searchFilters).map((row, rowIndex) => (
+                  <Grid item container spacing={1} xs={12} key={rowIndex}>
+                    {row.map((filter: SearchFilter) => {
+                      const selectedOptions = selectedFilters.get(filter.id);
+                      return (
+                        <Grid item xs={12} md={6} key={filter.id}>
+                          <FormControl color="secondary" variant="filled">
+                            <InputLabel id={`select-${filter.id}`}>
+                              {filter.title}
+                            </InputLabel>
+                            <Select
+                              labelId={`select-${filter.id}`}
+                              multiple
+                              renderValue={selected =>
+                                (selected as number[])
+                                  .map(
+                                    optionIndex =>
+                                      filter.options[optionIndex] ?? ""
+                                  )
+                                  .join(" · ")
+                              }
+                              value={selectedOptions ?? []}
+                              onChange={handleChange(filter)}
+                            >
+                              {filter.options.map((option, optionIndex) => (
+                                <MenuItem value={optionIndex} key={optionIndex}>
+                                  <Checkbox
+                                    checked={
+                                      (selectedOptions?.indexOf(optionIndex) ??
+                                        -1) > -1
+                                    }
+                                  />
+                                  <ListItemText primary={option} />
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                ))}
+            </Grid>
+          </CardContent>
+        </Card>
+      </Container>
+    </Fragment>
   );
 }
 
