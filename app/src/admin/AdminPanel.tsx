@@ -1,30 +1,12 @@
-import React, { useState, useEffect, Fragment } from "react";
-import {
-  Typography,
-  Container,
-  Box,
-  makeStyles,
-  Grid,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails
-} from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import SearchFilter from "../types/SearchFilter";
-import logger from "../utils/logger";
-import { getAllSearchFilters } from "../firebase/db";
-import { firebaseDocToSearchFilter } from "../converters";
-import { reduceNulls } from "../utils/ArrayUtils";
+import React from "react";
+import { Container, Box, makeStyles } from "@material-ui/core";
 import CircuitBoardPattern from "../img/CircuitBoard.svg";
+import FiltersMangment from "./ManageFilters";
 
 const GRADIENT =
   "rgba(255,255,255,1) 0%, rgba(245,172,202,.3) 50%, rgba(107,175,225,.3) 100%";
 
 const useStyles = makeStyles(theme => ({
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightBold
-  },
   container: {
     backgroundImage: `url(${CircuitBoardPattern})`
   },
@@ -55,51 +37,14 @@ const useStyles = makeStyles(theme => ({
 
 const AdminPanel = () => {
   const classes = useStyles();
-  const [existingFilters, setExistingFilters] = useState<SearchFilter[]>([]);
-
-  useEffect(() => {
-    getAllSearchFilters()
-      .then(docs => {
-        const remoteExistingFilters = reduceNulls(
-          docs.map(firebaseDocToSearchFilter)
-        );
-        if (remoteExistingFilters !== null) {
-          setExistingFilters(remoteExistingFilters);
-        }
-      })
-      .catch(logger.error);
-  }, []);
-
-  const filtersSection = (
-    <Fragment>
-      <Box mb={2}>
-        <Typography variant="h5">פילטרים</Typography>
-      </Box>
-      <Grid container></Grid>
-      {existingFilters.map(existingFilter => (
-        <ExpansionPanel key={existingFilter.id}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-          >
-            <Typography className={classes.heading}>
-              {existingFilter.title}
-            </Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <Typography>פה אמורות לבוא האפשרויות לבחירה. </Typography>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-      ))}
-    </Fragment>
-  );
-
   return (
     <Container className={classes.container}>
       <Container maxWidth="md" className={classes.content}>
         <div className={classes.appBarMargin}></div>
         <Box pt={2}>
-          <Box p={2}>{filtersSection}</Box>
+          <Box p={2}>
+            <FiltersMangment />
+          </Box>
         </Box>
       </Container>
     </Container>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Dialog, IconButton, makeStyles } from "@material-ui/core";
+import { Dialog, IconButton } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import AdminPanel from "./AdminPanel";
 import AppBar from "../components/AppBar";

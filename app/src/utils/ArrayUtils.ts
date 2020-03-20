@@ -5,4 +5,14 @@ export const splitIntoPairs = <T>(array: T[]) =>
   }, new Array<Array<T>>());
 
 export const reduceNulls = <T>(array: (T | null)[]) =>
-  array.indexOf(null) > -1 ? null : array as T[];
+  array.indexOf(null) > -1 ? null : (array as T[]);
+
+export const moveElementUp = <T>(array: T[], index: number) =>
+  index === 0
+    ? array
+    : [
+        ...array.slice(0, index - 1),
+        array[index],
+        array[index - 1],
+        ...array.slice(index + 1)
+      ];
