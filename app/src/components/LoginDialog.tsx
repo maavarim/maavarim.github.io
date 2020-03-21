@@ -14,7 +14,7 @@ import {
   signInWithFacebook,
   checkIfAlreadyLoggedIn
 } from "../firebase/auth";
-import LoggedInUser from "../types/LoggedInUser";
+import User from "../types/User";
 import Alert from "./Alert";
 
 interface LoginButtonProps extends ButtonProps {
@@ -89,7 +89,7 @@ const FacebookLoginButton = ({
 interface LoginDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  setLoggedInUser: (loggedInUser: LoggedInUser) => void;
+  setLoggedInUser: (loggedInUser: User) => void;
 }
 
 export default function LoginDialog({
@@ -107,7 +107,7 @@ export default function LoginDialog({
 
   const onLogin = (user: firebase.User) => {
     const { displayName: name, email, photoURL } = user;
-    const loggedInUser = new LoggedInUser(email, name, photoURL);
+    const loggedInUser = new User(email, name, photoURL);
 
     setIsSuccessSnackBarOpened(true);
     setLoggedInUser(loggedInUser);
@@ -127,7 +127,7 @@ export default function LoginDialog({
     // We can't use `onLogin` as it's re-created every render
     checkIfAlreadyLoggedIn().then((user: firebase.User) => {
       const { displayName: name, email, photoURL } = user;
-      const loggedInUser = new LoggedInUser(email, name, photoURL);
+      const loggedInUser = new User(email, name, photoURL);
 
       setLoggedInUser(loggedInUser);
       setOpen(false);

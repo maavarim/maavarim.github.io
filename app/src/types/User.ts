@@ -1,4 +1,4 @@
-export default class LoggedInUser {
+export default class User {
   email: string | null;
   name: string | null;
   photoURL: string | null;

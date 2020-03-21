@@ -4,11 +4,11 @@ import MainAppBar from "./components/MainAppBar";
 import Hero from "./components/Hero";
 import SearchContainer from "./components/SearchContainer";
 import LoginDialog from "./components/LoginDialog";
-import LoggedInUser from "./types/LoggedInUser";
+import User from "./types/User";
 import AdminDialogPanel from "./admin";
 
 function App() {
-  const [loggedInUser, setLoggedInUser] = useState<LoggedInUser | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isAdminDialogOpen, setIsAdminDialogOpen] = useState(false);
 

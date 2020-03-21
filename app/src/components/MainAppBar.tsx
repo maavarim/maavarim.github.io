@@ -1,14 +1,14 @@
 import React, { Fragment } from "react";
 import { Button } from "@material-ui/core";
-import LoggedInUser from "../types/LoggedInUser";
+import User from "../types/User";
 import { logout } from "../firebase/auth";
 import AppBar from "./AppBar";
 
 interface MainAppBarProps {
   setIsAdminDialogOpen: (isAdminDialogOpen: boolean) => void;
   setIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void;
-  loggedInUser: LoggedInUser | null;
-  setLoggedInUser: (loggedInUser: LoggedInUser | null) => void;
+  loggedInUser: User | null;
+  setLoggedInUser: (loggedInUser: User | null) => void;
 }
 
 const MainAppBar = ({
