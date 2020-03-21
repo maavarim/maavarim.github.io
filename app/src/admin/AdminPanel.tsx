@@ -1,7 +1,6 @@
 import React from "react";
 import { Container, Box, makeStyles } from "@material-ui/core";
 import CircuitBoardPattern from "../img/CircuitBoard.svg";
-import FiltersMangment from "./ManageFilters";
 
 const GRADIENT =
   "rgba(255,255,255,1) 0%, rgba(245,172,202,.3) 50%, rgba(107,175,225,.3) 100%";
@@ -43,7 +42,6 @@ const AdminPanel = () => {
         <div className={classes.appBarMargin}></div>
         <Box pt={2}>
           <Box p={2}>
-            <FiltersMangment />
           </Box>
         </Box>
       </Container>
