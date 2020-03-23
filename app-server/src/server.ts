@@ -4,7 +4,11 @@ import log from "./log";
 import { requireAuthenticated, requireStaff } from "./middleware/auth";
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"]
+  })
+);
 
 app.post("/testLogin", requireAuthenticated, async (req, res) => {
   return res.json(JSON.stringify({ email: req.userInfo.email })).send();
