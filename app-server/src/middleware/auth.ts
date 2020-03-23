@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import admin from "../config/firebase";
+import log from "../log";
 
 const getAuthToken: RequestHandler = (req, _, next) => {
   if (
@@ -14,12 +15,8 @@ const getAuthToken: RequestHandler = (req, _, next) => {
 export const requireAuthenticated: RequestHandler = (req, res, next) => {
   getAuthToken(req, res, async () => {
     try {
-      console.log(1);
       const { authToken } = req;
-      console.log(authToken);
-      
       const userInfo = await admin.auth().verifyIdToken(authToken);
-      console.log(userInfo);
       if (userInfo.email_verified && userInfo.email) {
         req.userInfo = { email: userInfo.email as string };
         return next();
@@ -29,6 +26,7 @@ export const requireAuthenticated: RequestHandler = (req, res, next) => {
           .send({ error: "You are not authorized to make this request" });
       }
     } catch (e) {
+      log.error(e);
       return res
         .status(401)
         .send({ error: "You are not authorized to make this request" });
