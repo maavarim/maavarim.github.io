@@ -14,8 +14,12 @@ const getAuthToken: RequestHandler = (req, _, next) => {
 export const requireAuthenticated: RequestHandler = (req, res, next) => {
   getAuthToken(req, res, async () => {
     try {
+      console.log(1);
       const { authToken } = req;
+      console.log(authToken);
+      
       const userInfo = await admin.auth().verifyIdToken(authToken);
+      console.log(userInfo);
       if (userInfo.email_verified && userInfo.email) {
         req.userInfo = { email: userInfo.email as string };
         return next();
