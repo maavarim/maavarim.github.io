@@ -5,9 +5,11 @@ import { requireAuthenticated, requireStaff } from "./middleware/auth";
 
 const app = express();
 app.use(
-  cors({
-    origin: ["http://localhost:3000"]
-  })
+  cors(
+    // {
+    //   origin: ["http://localhost:3000"]
+    // }
+  )
 );
 
 app.post("/testLogin", requireAuthenticated, async (req, res) => {
