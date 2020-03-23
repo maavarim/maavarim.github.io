@@ -30,3 +30,27 @@ export const checkIfAlreadyLoggedIn = () =>
   });
 
 export const logout = () => firebase.auth().signOut();
+
+export const getIdToken = () => firebase.auth().currentUser?.getIdToken(true);
+
+export function fetchAuthenticated(
+  input: RequestInfo,
+  init?: RequestInit
+): Promise<Response> {
+  return new Promise(
+    (resolve, reject) =>
+      getIdToken()
+        ?.then((idToken: string) => {
+          fetch(input, {
+            ...(init ?? {}),
+            headers: new Headers({
+              ...(init?.headers ?? {}),
+              Authorization: "Bearer " + idToken
+            })
+          })
+            .then(resolve)
+            .catch(reject);
+        })
+        .catch(reject) ?? reject(new Error("Failed to get user's ID token."))
+  );
+}
