@@ -1,27 +1,19 @@
 import * as express from "express";
-import * as cors from "cors";
-import log from "./log";
-import { requireAuthenticated, requireStaff } from "./middleware/auth";
+import * as loaders from "./loaders";
+import config from "./config";
 
-const app = express();
-app.use(
-  cors(
-    // {
-    //   origin: ["http://localhost:3000"]
-    // }
-  )
-);
+async function startServer() {
+  const app = express();
+  await loaders.init(app);
 
-app.post("/testLogin", requireAuthenticated, async (req, res) => {
-  return res.json(JSON.stringify({ email: req.userInfo.email })).send();
-});
+  const port = config.port || '5000';
+  app.listen(port, err => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log(`Server is running in port ${port}.`);
+  });
+}
 
-app.post("/testStaff", requireStaff, async (req, res) => {
-  return res
-    .json(JSON.stringify({ email: req.userInfo.email, isStaff: true }))
-    .send();
-});
-
-app.listen(process.env.PORT || 5000, () => {
-  log.info("app running");
-});
+startServer();

@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
-import admin from "../config/firebase";
+import * as admin from "firebase-admin";
 import log from "../log";
+import HttpException from "../exceptions/HttpException";
 
 const getAuthToken: RequestHandler = (req, _, next) => {
   if (
@@ -21,15 +22,17 @@ export const requireAuthenticated: RequestHandler = (req, res, next) => {
         req.userInfo = { email: userInfo.email as string };
         return next();
       } else {
-        return res
-          .status(401)
-          .send({ error: "You are not authorized to make this request" });
+        throw new HttpException(
+          401,
+          "You are not authorized to make this request"
+        );
       }
     } catch (e) {
       log.error(e);
-      return res
-        .status(401)
-        .send({ error: "You are not authorized to make this request" });
+      throw new HttpException(
+        401,
+        "You are not authorized to make this request"
+      );
     }
   });
 };
@@ -42,9 +45,10 @@ export const requireStaff: RequestHandler = (req, res, next) => {
     ) {
       return next();
     } else {
-      return res
-        .status(401)
-        .send({ error: "You are not authorized to make this request" });
+      throw new HttpException(
+        401,
+        "You are not authorized to make this request"
+      );
     }
   });
 };
