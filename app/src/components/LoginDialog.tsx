@@ -106,8 +106,8 @@ export default function LoginDialog({
   };
 
   const onLogin = (user: firebase.User) => {
-    const { displayName: name, email, photoURL } = user;
-    const loggedInUser = new User(email, name, photoURL);
+    const { email } = user;
+    const loggedInUser = new User(email);
 
     setIsSuccessSnackBarOpened(true);
     setLoggedInUser(loggedInUser);
@@ -126,8 +126,8 @@ export default function LoginDialog({
   useEffect(() => {
     // We can't use `onLogin` as it's re-created every render
     checkIfAlreadyLoggedIn().then((user: firebase.User) => {
-      const { displayName: name, email, photoURL } = user;
-      const loggedInUser = new User(email, name, photoURL);
+      const { email } = user;
+      const loggedInUser = new User(email);
 
       setLoggedInUser(loggedInUser);
       setOpen(false);
