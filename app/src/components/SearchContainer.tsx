@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useReducer } from "react";
 import {
   Container,
   Typography,
@@ -8,17 +8,13 @@ import {
   CardContent,
   Grid,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Checkbox,
-  ListItemText,
-  InputAdornment
+  InputAdornment,
+  Button
 } from "@material-ui/core";
 import HomeSearchIcon from "./custom-icons/HomeSearchIcon";
 import SearchFilter, { searchFilters } from "../searchFilters";
 import { splitIntoPairs } from "../utils/ArrayUtils";
+import { fetchRecommendations } from "../server/api";
 
 const useStyles = makeStyles(theme => ({
   searchContainer: {
@@ -32,20 +28,46 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+type SelectedFilterApplicatorsState = Map<string, string[]>;
+type SelectedFilterApplicatorsReducerAction = {
+  type: "change";
+  filterKey: string;
+  selectedOptions: string[];
+};
+
+function selectedFilterApplicatorsReducer(
+  state: SelectedFilterApplicatorsState,
+  action: SelectedFilterApplicatorsReducerAction
+): SelectedFilterApplicatorsState {
+  switch (action.type) {
+    case "change":
+      const newState = new Map(state);
+      if (action.selectedOptions.length === 0) {
+        newState.delete(action.filterKey);
+      } else {
+        newState.set(action.filterKey, action.selectedOptions);
+      }
+      return newState;
+  }
+}
+
 function SearchContainer() {
   const classes = useStyles();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState(
-    new Map<string, string[]>() // filter.firebaseFieldName => selected options
+  const [freeTextQuery, setFreeTextQuery] = useState("");
+  const [selectedFilters, dispathSelectedFiltersAction] = useReducer(
+    selectedFilterApplicatorsReducer,
+    new Map<string, string[]>()
   );
 
-  const handleChange = (filter: SearchFilter) => (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
-    const selectedOptions = event.target.value as string[];
-    const updatedSelectedFilters = new Map(selectedFilters);
-    updatedSelectedFilters.set(filter.firebaseFieldName, selectedOptions);
-    setSelectedFilters(updatedSelectedFilters);
+  const fetchResults = () => {
+    const searchQuery = {
+      freeText: freeTextQuery,
+      ...Object.fromEntries(selectedFilters)
+    };
+
+    fetchRecommendations(searchQuery)
+      .then(console.log)
+      .catch(console.error);
   };
 
   return (
@@ -66,8 +88,8 @@ function SearchContainer() {
                 <Grid item xs={12}>
                   <TextField
                     label="חיפוש חופשי"
-                    value={searchQuery}
-                    onChange={event => setSearchQuery(event.target.value)}
+                    value={freeTextQuery}
+                    onChange={event => setFreeTextQuery(event.target.value)}
                     color="secondary"
                     variant="filled"
                     InputProps={{
@@ -82,45 +104,26 @@ function SearchContainer() {
               </Grid>
               {splitIntoPairs(searchFilters).map((row, rowIndex) => (
                 <Grid item container spacing={1} xs={12} key={rowIndex}>
-                  {row.map((filter: SearchFilter) => {
-                    const selectedOptions = selectedFilters.get(
-                      filter.firebaseFieldName
-                    );
-                    return (
-                      <Grid item xs={12} md={6} key={filter.firebaseFieldName}>
-                        <FormControl color="secondary" variant="filled">
-                          <InputLabel id={`select-${filter.firebaseFieldName}`}>
-                            {filter.title}
-                          </InputLabel>
-                          <Select
-                            labelId={`select-${filter.firebaseFieldName}`}
-                            multiple
-                            renderValue={selected =>
-                              (selected as string[])
-                                .join(" · ")
-                            }
-                            value={selectedOptions ?? []}
-                            onChange={handleChange(filter)}
-                          >
-                            {filter.options.map((option, optionIndex) => (
-                              <MenuItem value={option} key={optionIndex}>
-                                <Checkbox
-                                  checked={
-                                    (selectedOptions?.indexOf(option) ??
-                                      -1) > -1
-                                  }
-                                />
-                                <ListItemText primary={option} />
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
+                  {row.map(
+                    (searchFilter: SearchFilter, searchFilterIndexInRow) => (
+                      <Grid item xs={12} md={6} key={searchFilterIndexInRow}>
+                        {searchFilter({
+                          onChange: (filterKey, selectedOptions) =>
+                            dispathSelectedFiltersAction({
+                              type: "change",
+                              filterKey,
+                              selectedOptions
+                            })
+                        })}
                       </Grid>
-                    );
-                  })}
+                    )
+                  )}
                 </Grid>
               ))}
             </Grid>
+            <Button color="primary" variant="contained" onClick={fetchResults}>
+              חיפוש
+            </Button>
           </CardContent>
         </Card>
       </Container>

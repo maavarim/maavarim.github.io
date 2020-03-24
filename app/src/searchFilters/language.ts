@@ -1,19 +1,17 @@
-import SearchFilter from ".";
+import { getSelectBasedSearchFilter } from "./SelectBasedSearchFilter";
 
-const languageSearchFilter: SearchFilter = {
-  firebaseFieldName: "language",
-  title: "שפה",
-  options: [
-    "עברית",
-    "אנגלית",
-    "רוסית",
-    "ערבית",
-    "צרפתית",
-    "גרמנית",
-    "ספרדית",
-    "פורטוגזית",
-    "איטלקית"
-  ]
-};
+const fieldName = "language";
+const title = "שפה";
+const options = [
+  "עברית",
+  "אנגלית",
+  "רוסית",
+  "ערבית",
+  "צרפתית",
+  "גרמנית",
+  "ספרדית",
+  "פורטוגזית",
+  "איטלקית"
+];
 
-export default languageSearchFilter;
+export default getSelectBasedSearchFilter(fieldName, title, options);

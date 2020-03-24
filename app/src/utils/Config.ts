@@ -1,3 +1,4 @@
 export const Config = {
-  searchFilterLength: 64
+  searchFilterLength: 64,
+  debug: true
 };

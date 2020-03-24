@@ -5,11 +5,14 @@ import healthCareSearchFilter from "./healthCare";
 import languageSearchFilter from "./language";
 import genderSearchFilter from "./gender";
 
-interface SearchFilter {
-  firebaseFieldName: string;
-  title: string;
-  options: string[];
+interface SearchFilterProps {
+  onChange: (
+    filterKey: string,
+    selectedOptions: string[]
+  ) => void;
 }
+
+export type SearchFilter = (props: SearchFilterProps) => JSX.Element;
 
 export const searchFilters = [
   professionSearchFilter,

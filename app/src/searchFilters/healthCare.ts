@@ -1,9 +1,15 @@
-import SearchFilter from ".";
+import { getSelectBasedSearchFilter } from "./SelectBasedSearchFilter";
 
-const healthCareSearchFilter: SearchFilter = {
-  firebaseFieldName: "healthCare",
-  title: "קופת חולים",
-  options: ["כללית", "מכבי", "לאומית", "מאוחדת", "פרטי", "בית חולים", "צה״ל"]
-};
+const fieldName = "healthCare";
+const title = "קופת חולים";
+const options = [
+  "כללית",
+  "מכבי",
+  "לאומית",
+  "מאוחדת",
+  "פרטי",
+  "בית חולים",
+  "צה״ל"
+];
 
-export default healthCareSearchFilter;
+export default getSelectBasedSearchFilter(fieldName, title, options);

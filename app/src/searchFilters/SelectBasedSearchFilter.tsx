@@ -10,32 +10,24 @@ import {
 import SearchFilter from ".";
 
 export function getSelectBasedSearchFilter(
-  firebaseFieldName: string,
+  fieldName: string,
   title: string,
   options: string[]
 ): SearchFilter {
-  const getApplicator = (selectedOptions: string[]) =>
-    selectedOptions.length === 0
-      ? null
-      : (query: firebase.firestore.Query<firebase.firestore.DocumentData>) => {
-        
-        query.where(firebaseFieldName, "in", selectedOptions);
-      }
-
   return props => {
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
       const updatedSelectedOptions = event.target.value as string[];
       setSelectedOptions(updatedSelectedOptions);
-      props.onChange(firebaseFieldName, getApplicator(updatedSelectedOptions));
+      props.onChange(fieldName, updatedSelectedOptions);
     };
 
     return (
       <FormControl color="secondary" variant="filled">
-        <InputLabel id={`select-${firebaseFieldName}`}>{title}</InputLabel>
+        <InputLabel id={`select-${fieldName}`}>{title}</InputLabel>
         <Select
-          labelId={`select-${firebaseFieldName}`}
+          labelId={`select-${fieldName}`}
           multiple
           renderValue={selected => (selected as string[]).join(" · ")}
           value={selectedOptions ?? []}

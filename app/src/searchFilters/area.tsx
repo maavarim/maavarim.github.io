@@ -1,6 +1,6 @@
 import { getSelectBasedSearchFilter } from "./SelectBasedSearchFilter";
 
-const firebaseFieldName = "area";
+const fieldName = "area";
 const title = "אזור";
 const options = [
   "אזור אשקלון",
@@ -20,4 +20,4 @@ const options = [
   "שפלה"
 ];
 
-export default getSelectBasedSearchFilter(firebaseFieldName, title, options);
+export default getSelectBasedSearchFilter(fieldName, title, options);

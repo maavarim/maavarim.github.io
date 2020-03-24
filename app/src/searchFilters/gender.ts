@@ -1,9 +1,7 @@
-import SearchFilter from ".";
+import { getSelectBasedSearchFilter } from "./SelectBasedSearchFilter";
 
-const genderSearchFilter: SearchFilter = {
-  firebaseFieldName: "gender",
-  title: "מגדר",
-  options: ["אחר", "אישה", "גבר"]
-};
+const fieldName = "gender";
+const title = "מגדר";
+const options = ["אחר", "אישה", "גבר"];
 
-export default genderSearchFilter;
+export default getSelectBasedSearchFilter(fieldName, title, options);
