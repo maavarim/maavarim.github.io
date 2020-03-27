@@ -1,5 +1,5 @@
 {
-  "name": "heroku-typescript",
+  "name": "maavarim-friendly-app-server",
   "scripts": {
     "ts:watch": "tsc -w",
     "ts:build": "tsc",

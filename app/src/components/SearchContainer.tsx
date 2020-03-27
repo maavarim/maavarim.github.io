@@ -6,14 +6,12 @@ import {
   Box,
   Card,
   CardContent,
-  Grid,
   TextField,
   InputAdornment,
   Button
 } from "@material-ui/core";
 import HomeSearchIcon from "./custom-icons/HomeSearchIcon";
 import SearchFilter, { searchFilters } from "../searchFilters";
-import { splitIntoPairs } from "../utils/ArrayUtils";
 import { fetchRecommendations } from "../server/api";
 
 const useStyles = makeStyles(theme => ({
@@ -21,9 +19,18 @@ const useStyles = makeStyles(theme => ({
     marginTop: `-${theme.spacing(4)}px`
   },
   fieldsContainer: {
-    width: "calc(100% + 16px)",
-    "& .MuiFormControl-root": {
-      width: "100%"
+    display: "grid",
+    gridGap: theme.spacing(1),
+    gridTemplateColumns: "repeat(2, 1fr)",
+    [theme.breakpoints.down("sm")]: {
+      gridTemplateColumns: "1fr"
+    }
+  },
+  freeTextField: {
+    gridRow: 1,
+    gridColumn: "1 / 3",
+    [theme.breakpoints.down("sm")]: {
+      gridColumn: 1
     }
   }
 }));
@@ -74,56 +81,55 @@ function SearchContainer() {
     <Fragment>
       <Container maxWidth="md" className={classes.searchContainer}>
         <Card>
-          <CardContent>
-            <Box mb={2}>
-              <Typography variant="h5" align="center" color="textPrimary">
-                חיפוש אנשי.ות מקצוע
-              </Typography>
-              <Typography align="center" color="textSecondary" gutterBottom>
-                חפשו בחיפוש חופשי או סננו לפי השדות
-              </Typography>
-            </Box>
-            <Grid container spacing={1} className={classes.fieldsContainer}>
-              <Grid item container spacing={1} xs={12}>
-                <Grid item xs={12}>
-                  <TextField
-                    label="חיפוש חופשי"
-                    value={freeTextQuery}
-                    onChange={event => setFreeTextQuery(event.target.value)}
-                    color="secondary"
-                    variant="filled"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <HomeSearchIcon />
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              {splitIntoPairs(searchFilters).map((row, rowIndex) => (
-                <Grid item container spacing={1} xs={12} key={rowIndex}>
-                  {row.map(
-                    (searchFilter: SearchFilter, searchFilterIndexInRow) => (
-                      <Grid item xs={12} md={6} key={searchFilterIndexInRow}>
-                        {searchFilter({
-                          onChange: (filterKey, selectedOptions) =>
-                            dispathSelectedFiltersAction({
-                              type: "change",
-                              filterKey,
-                              selectedOptions
-                            })
-                        })}
-                      </Grid>
+          <CardContent style={{ padding: 0 }}>
+            <Box p={2}>
+              <Box mb={2}>
+                <Typography variant="h5" align="center" color="textPrimary">
+                  חיפוש אנשי.ות מקצוע
+                </Typography>
+                <Typography align="center" color="textSecondary" gutterBottom>
+                  חפשו בחיפוש חופשי או סננו לפי השדות
+                </Typography>
+              </Box>
+              <Box className={classes.fieldsContainer}>
+                <TextField
+                  className={classes.freeTextField}
+                  label="חיפוש חופשי"
+                  value={freeTextQuery}
+                  onChange={event => setFreeTextQuery(event.target.value)}
+                  color="secondary"
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <HomeSearchIcon />
+                      </InputAdornment>
                     )
-                  )}
-                </Grid>
-              ))}
-            </Grid>
-            <Button color="primary" variant="contained" onClick={fetchResults}>
-              חיפוש
-            </Button>
+                  }}
+                />
+                {searchFilters.map((searchFilter: SearchFilter) => (
+                  <searchFilter.render
+                    key={searchFilter.filterKey}
+                    onChange={selectedOptions =>
+                      dispathSelectedFiltersAction({
+                        type: "change",
+                        filterKey: searchFilter.filterKey,
+                        selectedOptions
+                      })
+                    }
+                  />
+                ))}
+              </Box>
+              <Box display="flex" justifyContent="flex-end" mt={1}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={fetchResults}
+                >
+                  חיפוש
+                </Button>
+              </Box>
+            </Box>
           </CardContent>
         </Card>
       </Container>

@@ -6,10 +6,15 @@ import SearchContainer from "./components/SearchContainer";
 import LoginDialog from "./components/LoginDialog";
 import User from "./types/User";
 import AdminDialogPanel from "./admin";
+import AddRecommendationDialog from "./components/AddRecommendationDialog";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
+  const [
+    isAddRecommendationDialogOpen,
+    setIsAddRecommendationDialogOpen
+  ] = useState(false);
   const [isAdminDialogOpen, setIsAdminDialogOpen] = useState(false);
 
   return (
@@ -25,7 +30,7 @@ function App() {
         <Hero
           isLoggedIn={loggedInUser !== null}
           onLoginButtonClick={() => setIsLoginDialogOpen(true)}
-          onAddButtonClick={console.log}
+          onAddButtonClick={() => setIsAddRecommendationDialogOpen(true)}
         />
         <SearchContainer />
       </main>
@@ -33,6 +38,10 @@ function App() {
         open={isLoginDialogOpen}
         setOpen={setIsLoginDialogOpen}
         setLoggedInUser={setLoggedInUser}
+      />
+      <AddRecommendationDialog
+        open={isAddRecommendationDialogOpen}
+        setOpen={setIsAddRecommendationDialogOpen}
       />
       <AdminDialogPanel
         open={isAdminDialogOpen}

@@ -7,20 +7,20 @@ import {
   Checkbox,
   ListItemText
 } from "@material-ui/core";
-import SearchFilter from ".";
+import SearchFilter, { SearchFilterRenderer } from ".";
 
-export function getSelectBasedSearchFilter(
+function getSelectBasedSearchFilterRenderer(
   fieldName: string,
   title: string,
   options: string[]
-): SearchFilter {
+): SearchFilterRenderer {
   return props => {
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
       const updatedSelectedOptions = event.target.value as string[];
       setSelectedOptions(updatedSelectedOptions);
-      props.onChange(fieldName, updatedSelectedOptions);
+      props.onChange(updatedSelectedOptions);
     };
 
     return (
@@ -44,5 +44,16 @@ export function getSelectBasedSearchFilter(
         </Select>
       </FormControl>
     );
+  };
+}
+
+export function getSelectBasedSearchFilter(
+  filterKey: string,
+  title: string,
+  options: string[]
+): SearchFilter {
+  return {
+    filterKey,
+    render: getSelectBasedSearchFilterRenderer(filterKey, title, options)
   };
 }

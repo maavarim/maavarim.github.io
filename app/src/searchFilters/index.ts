@@ -6,13 +6,15 @@ import languageSearchFilter from "./language";
 import genderSearchFilter from "./gender";
 
 interface SearchFilterProps {
-  onChange: (
-    filterKey: string,
-    selectedOptions: string[]
-  ) => void;
+  onChange: (selectedOptions: string[]) => void;
 }
 
-export type SearchFilter = (props: SearchFilterProps) => JSX.Element;
+export type SearchFilterRenderer = (props: SearchFilterProps) => JSX.Element;
+
+export type SearchFilter = {
+  filterKey: string;
+  render: SearchFilterRenderer;
+};
 
 export const searchFilters = [
   professionSearchFilter,
