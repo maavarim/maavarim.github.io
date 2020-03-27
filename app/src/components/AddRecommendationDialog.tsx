@@ -27,6 +27,8 @@ import {
 import { setMap } from "../utils/Map";
 import { iterableSome } from "../utils/Array";
 import { isBlankOrEmpty } from "../utils/String";
+import server from "../server";
+import User from "../types/User";
 
 const useStyles = makeStyles(theme => ({
   fieldsContainer: {
@@ -40,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     gridGap: theme.spacing(1),
     gridTemplateColumns: "repeat(2, 1fr)",
     gridTemplateRows: "repeat(3, 1fr)",
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("xs")]: {
       gridTemplateColumns: "1fr",
       gridTemplateRows: "1fr"
     }
@@ -49,7 +51,7 @@ const useStyles = makeStyles(theme => ({
     height: "100%",
     gridRow: "1 / 4",
     gridColumn: 2,
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("xs")]: {
       height: "unset",
       gridRow: 4,
       gridColumn: 1
@@ -60,7 +62,7 @@ const useStyles = makeStyles(theme => ({
     "& .MuiInputBase-root": {
       height: "100%"
     },
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("xs")]: {
       "& .MuiInputBase-root": {
         height: "unset"
       }
@@ -70,7 +72,7 @@ const useStyles = makeStyles(theme => ({
     display: "grid",
     gridGap: theme.spacing(1),
     gridTemplateColumns: "repeat(2, 1fr)",
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("xs")]: {
       gridTemplateColumns: "1fr"
     }
   }
@@ -88,24 +90,26 @@ const StyledRating = withStyles({
 interface AddRecommendationDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  loggedInUser: User;
 }
 
 const AddRecommendationDialog = ({
   open,
-  setOpen
+  setOpen,
+  loggedInUser
 }: AddRecommendationDialogProps) => {
   const theme = useTheme();
   const classes = useStyles();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   const [isErrorSnackBarOpened, setIsErrorSnackBarOpened] = useState(false);
   const [isSuccessSnackBarOpened, setIsSuccessSnackBarOpened] = useState(false);
 
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phone, setPhone] = useState("");
   const [rating, setRating] = useState<number | null>(null);
-  const [moreDetails, setMoreDetails] = useState("");
+  const [additionalInfo, setAdditionalInfo] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<Map<string, string[]>>(
     new Map(searchFilters.map(searchFilter => [searchFilter.filterKey, []]))
   );
@@ -117,8 +121,32 @@ const AddRecommendationDialog = ({
       selectedFilters.entries(),
       ([_, selectedOptions]) => selectedOptions.length === 0
     );
+    
+  const create = () => {
+    if (isInvalidRecommendation) return;
 
-  const create = () => {};
+    const recommendation = ({
+      authorEmail: loggedInUser.email,
+      name,
+      rating: rating ?? 0,
+      phone,
+      location,
+      additionalInfo,
+
+      ...Object.fromEntries(selectedFilters.entries()),
+
+      accepted: false
+    } as unknown) as Recommendation;
+
+    server
+      .createRecommendation(recommendation)
+      .then(() => {
+        setIsSuccessSnackBarOpened(true);
+        setOpen(false);
+      })
+      .catch(() => setIsErrorSnackBarOpened(true));
+  };
+
   return (
     <Fragment>
       <Dialog
@@ -158,8 +186,8 @@ const AddRecommendationDialog = ({
               <TextField
                 fullWidth
                 label="טלפון"
-                value={phoneNumber}
-                onChange={event => setPhoneNumber(event.target.value)}
+                value={phone}
+                onChange={event => setPhone(event.target.value)}
                 color="secondary"
                 variant="filled"
                 placeholder="053-1234567"
@@ -219,8 +247,8 @@ const AddRecommendationDialog = ({
                   className={classes.moreDetailsTextField}
                   fullWidth
                   rows={5}
-                  value={moreDetails}
-                  onChange={event => setMoreDetails(event.target.value)}
+                  value={additionalInfo}
+                  onChange={event => setAdditionalInfo(event.target.value)}
                   variant="filled"
                   color="secondary"
                 />

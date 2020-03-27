@@ -27,7 +27,7 @@ const post = (path: string, body: any = {}, auth: boolean = true) =>
     body: JSON.stringify(body)
   });
 
-export async function createRecommendation(
+async function createRecommendation(
   recommendation: Recommendation
 ): Promise<void> {
   return post("recommendation/", recommendation).then(({ status }) => {
@@ -35,9 +35,14 @@ export async function createRecommendation(
   });
 }
 
-export async function fetchRecommendations(
-  query: any
-): Promise<Recommendation[]> {
+async function fetchRecommendations(query: any): Promise<Recommendation[]> {
   const jsonRes = await (await get("recommendation/", query, false)).json();
   return jsonRes["recommendations"] as Recommendation[];
 }
+
+const server = {
+  createRecommendation,
+  fetchRecommendations
+};
+
+export default server;

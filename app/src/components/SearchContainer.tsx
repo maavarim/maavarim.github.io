@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import HomeSearchIcon from "./custom-icons/HomeSearchIcon";
 import SearchFilter, { searchFilters } from "../searchFilters";
-import { fetchRecommendations } from "../server/api";
+import server from "../server";
 
 const useStyles = makeStyles(theme => ({
   searchContainer: {
@@ -22,14 +22,14 @@ const useStyles = makeStyles(theme => ({
     display: "grid",
     gridGap: theme.spacing(1),
     gridTemplateColumns: "repeat(2, 1fr)",
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("xs")]: {
       gridTemplateColumns: "1fr"
     }
   },
   freeTextField: {
     gridRow: 1,
     gridColumn: "1 / 3",
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("xs")]: {
       gridColumn: 1
     }
   }
@@ -72,7 +72,8 @@ function SearchContainer() {
       ...Object.fromEntries(selectedFilters)
     };
 
-    fetchRecommendations(searchQuery)
+    server
+      .fetchRecommendations(searchQuery)
       .then(console.log)
       .catch(console.error);
   };

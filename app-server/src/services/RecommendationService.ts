@@ -2,7 +2,6 @@ import RecommendationModel from "../model/Recommendation";
 import { FilterQuery } from "mongoose";
 import Recommendation from "../types/Recommendation";
 import FindRecommendationDTO from "../dtos/FindRecommendation";
-import { classToPlain } from "class-transformer";
 
 export default class RecommendationService {
   static async create(recommendation: Recommendation): Promise<any> {

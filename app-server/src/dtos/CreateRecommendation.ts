@@ -1,11 +1,14 @@
 import {
   IsString,
   IsNotEmpty,
-  IsInt,
   IsBoolean,
   Equals,
   IsArray,
-  ArrayNotEmpty
+  ArrayNotEmpty,
+  IsNumber,
+  IsOptional,
+  Min,
+  Max
 } from "class-validator";
 import Recommendation from "../types/Recommendation";
 
@@ -18,19 +21,45 @@ class CreateRecommendationDTO implements Recommendation {
   @IsNotEmpty()
   name: string;
 
-  @IsInt()
+  @IsNumber()
+  @Min(0)
+  @Max(5)
   rating: number;
 
+  @IsOptional()
+  @IsString()
   phone?: string;
+  @IsOptional()
+  @IsString()
   location?: string;
+  @IsOptional()
+  @IsString()
   additionalInfo?: string;
 
-  @IsArray() @ArrayNotEmpty() area: string[] = [];
-  @IsArray() @ArrayNotEmpty() expertise: string[] = [];
-  @IsArray() @ArrayNotEmpty() gender: string[] = [];
-  @IsArray() @ArrayNotEmpty() healthCare: string[] = [];
-  @IsArray() @ArrayNotEmpty() language: string[] = [];
-  @IsArray() @ArrayNotEmpty() profession: string[] = [];
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  area: string[] = [];
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  expertise: string[] = [];
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  gender: string[] = [];
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  healthCare: string[] = [];
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  language: string[] = [];
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  profession: string[] = [];
 
   @IsBoolean()
   @Equals(false)

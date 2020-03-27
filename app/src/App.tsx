@@ -39,10 +39,13 @@ function App() {
         setOpen={setIsLoginDialogOpen}
         setLoggedInUser={setLoggedInUser}
       />
-      <AddRecommendationDialog
-        open={isAddRecommendationDialogOpen}
-        setOpen={setIsAddRecommendationDialogOpen}
-      />
+      {loggedInUser && (
+        <AddRecommendationDialog
+          open={isAddRecommendationDialogOpen}
+          setOpen={setIsAddRecommendationDialogOpen}
+          loggedInUser={loggedInUser}
+        />
+      )}
       <AdminDialogPanel
         open={isAdminDialogOpen}
         onClose={() => setIsAdminDialogOpen(false)}
