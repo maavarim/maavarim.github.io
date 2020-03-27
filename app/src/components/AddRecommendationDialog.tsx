@@ -10,25 +10,22 @@ import {
   InputAdornment,
   Typography,
   useTheme,
-  useMediaQuery,
-  withStyles
+  useMediaQuery
 } from "@material-ui/core";
-import Rating from "@material-ui/lab/Rating";
 import Alert from "./Alert";
 import Recommendation from "../types/Recommendation";
 import SearchFilter, { searchFilters } from "../searchFilters";
 import {
-  StarBorder,
   CallTwoTone,
   PlaceTwoTone,
-  AccountCircleTwoTone,
-  StarTwoTone
+  AccountCircleTwoTone
 } from "@material-ui/icons";
 import { setMap } from "../utils/Map";
 import { iterableSome } from "../utils/Array";
 import { isBlankOrEmpty } from "../utils/String";
 import server from "../server";
 import User from "../types/User";
+import Rating from "./Rating";
 
 const useStyles = makeStyles(theme => ({
   fieldsContainer: {
@@ -78,15 +75,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const StyledRating = withStyles({
-  iconFilled: {
-    color: "#8e24aa"
-  },
-  iconHover: {
-    color: "#a739c6"
-  }
-})(Rating);
-
 interface AddRecommendationDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -121,7 +109,7 @@ const AddRecommendationDialog = ({
       selectedFilters.entries(),
       ([_, selectedOptions]) => selectedOptions.length === 0
     );
-    
+
   const create = () => {
     if (isInvalidRecommendation) return;
 
@@ -231,14 +219,10 @@ const AddRecommendationDialog = ({
                   <Box mr={1}>
                     <Typography color="textSecondary">דירוג: </Typography>
                   </Box>
-                  <StyledRating
+                  <Rating
                     name="rating"
                     value={rating}
-                    precision={0.5}
                     onChange={(_, newValue) => setRating(newValue)}
-                    emptyIcon={<StarBorder fontSize="inherit" />}
-                    icon={<StarTwoTone fontSize="inherit" />}
-                    color="secondary"
                   />
                 </Box>
                 <TextField

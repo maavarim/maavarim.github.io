@@ -10,9 +10,11 @@ import {
   InputAdornment,
   Button
 } from "@material-ui/core";
+import RecommendationView from "./RecommendationView";
 import HomeSearchIcon from "./custom-icons/HomeSearchIcon";
 import SearchFilter, { searchFilters } from "../searchFilters";
 import server from "../server";
+import ServerRecommendation from "../types/ServerRecommendation";
 
 const useStyles = makeStyles(theme => ({
   searchContainer: {
@@ -31,6 +33,17 @@ const useStyles = makeStyles(theme => ({
     gridColumn: "1 / 3",
     [theme.breakpoints.down("xs")]: {
       gridColumn: 1
+    }
+  },
+  resultsContainer: {
+    display: "grid",
+    gridGap: theme.spacing(1),
+    gridTemplateColumns: "repeat(3, 1fr)",
+    [theme.breakpoints.only("xs")]: {
+      gridTemplateColumns: "repeat(2, 1fr)"
+    },
+    [theme.breakpoints.down("xs")]: {
+      gridTemplateColumns: "1fr"
     }
   }
 }));
@@ -65,6 +78,7 @@ function SearchContainer() {
     selectedFilterApplicatorsReducer,
     new Map<string, string[]>()
   );
+  const [results, setResults] = useState<ServerRecommendation[] | null>(null);
 
   const fetchResults = () => {
     const searchQuery = {
@@ -74,7 +88,7 @@ function SearchContainer() {
 
     server
       .fetchRecommendations(searchQuery)
-      .then(console.log)
+      .then(setResults)
       .catch(console.error);
   };
 
@@ -133,6 +147,16 @@ function SearchContainer() {
             </Box>
           </CardContent>
         </Card>
+        {results !== null && (
+          <Box className={classes.resultsContainer} mt={2} mb={2}>
+            {results.map(recommendation => (
+              <RecommendationView
+                key={recommendation._id}
+                recommendation={recommendation}
+              />
+            ))}
+          </Box>
+        )}
       </Container>
     </Fragment>
   );

@@ -1,6 +1,7 @@
 import { Config } from "../utils/Config";
 import { fetchAuthenticated } from "../firebase/auth";
 import Recommendation from "../types/Recommendation";
+import ServerRecommendation from "../types/ServerRecommendation";
 
 const apiBase = Config.debug
   ? "http://localhost:5000/"
@@ -35,9 +36,11 @@ async function createRecommendation(
   });
 }
 
-async function fetchRecommendations(query: any): Promise<Recommendation[]> {
+async function fetchRecommendations(
+  query: any
+): Promise<ServerRecommendation[]> {
   const jsonRes = await (await get("recommendation/", query, false)).json();
-  return jsonRes["recommendations"] as Recommendation[];
+  return jsonRes["recommendations"] as ServerRecommendation[];
 }
 
 const server = {

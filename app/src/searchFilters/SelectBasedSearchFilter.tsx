@@ -8,6 +8,7 @@ import {
   ListItemText
 } from "@material-ui/core";
 import SearchFilter, { SearchFilterRenderer } from ".";
+import { formatForDisplaying } from "../utils/Array";
 
 function getSelectBasedSearchFilterRenderer(
   fieldName: string,
@@ -29,7 +30,7 @@ function getSelectBasedSearchFilterRenderer(
         <Select
           labelId={`select-${fieldName}`}
           multiple
-          renderValue={selected => (selected as string[]).join(" · ")}
+          renderValue={selected => formatForDisplaying(selected as string[])}
           value={selectedOptions ?? []}
           onChange={handleChange}
         >

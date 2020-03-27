@@ -22,3 +22,5 @@ export const iterableSome = <T>(
   }
   return false;
 };
+
+export const formatForDisplaying = (array: string[]) => array.join(" · ");
