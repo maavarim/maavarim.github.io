@@ -33,10 +33,16 @@ export default class RecommendationService {
     }
 
     return new Promise((resolve, reject) => {
-      RecommendationModel.find(query, (error, recommendations) => {
-        if (error) reject(error);
-        else resolve(recommendations);
-      });
+      RecommendationModel.find(
+        {
+          $query: query,
+          $orderby: { createdAt: -1 }
+        },
+        (error, recommendations) => {
+          if (error) reject(error);
+          else resolve(recommendations);
+        }
+      );
     });
   }
 }

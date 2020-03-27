@@ -5,6 +5,7 @@ export default interface Recommendation {
   phone?: string;
   location?: string;
   additionalInfo?: string;
+  createdAt?: Date;
 
   area: string[];
   expertise: string[];
