@@ -3,10 +3,10 @@ import { CssBaseline } from "@material-ui/core";
 import MainAppBar from "./components/MainAppBar";
 import Hero from "./components/Hero";
 import SearchContainer from "./components/SearchContainer";
-import LoginDialog from "./components/LoginDialog";
+import LoginDialog from "./dialogs/LoginDialog";
 import User from "./types/User";
 import AdminDialogPanel from "./admin";
-import AddRecommendationDialog from "./components/AddRecommendationDialog";
+import AddRecommendationDialog from "./dialogs/AddRecommendationDialog";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);

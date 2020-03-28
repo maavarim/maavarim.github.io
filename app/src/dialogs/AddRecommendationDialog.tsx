@@ -12,7 +12,7 @@ import {
   useTheme,
   useMediaQuery
 } from "@material-ui/core";
-import Alert from "./Alert";
+import Alert from "../components/Alert";
 import Recommendation from "../types/Recommendation";
 import SearchFilter, { searchFilters } from "../searchFilters";
 import {
@@ -25,7 +25,7 @@ import { iterableSome } from "../utils/Array";
 import { isBlankOrEmpty } from "../utils/String";
 import server from "../server";
 import User from "../types/User";
-import Rating from "./Rating";
+import Rating from "../components/Rating";
 
 const useStyles = makeStyles(theme => ({
   fieldsContainer: {

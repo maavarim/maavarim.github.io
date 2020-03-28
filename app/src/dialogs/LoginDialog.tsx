@@ -15,7 +15,7 @@ import {
   checkIfAlreadyLoggedIn
 } from "../firebase/auth";
 import User from "../types/User";
-import Alert from "./Alert";
+import Alert from "../components/Alert";
 
 interface LoginButtonProps extends ButtonProps {
   onLogin: (userCredential: firebase.auth.UserCredential) => void;
