@@ -19,7 +19,10 @@ const useStyles = makeStyles(theme => ({
     background: "white"
   },
   content: {
-    padding: theme.spacing(8, 0, 10)
+    padding: theme.spacing(8, 0, 10),
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(8, 2, 10, 2)
+    }
   },
   cta: {
     all: "unset",

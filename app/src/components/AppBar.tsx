@@ -11,10 +11,18 @@ import LogoJpeg from "../img/Logo.jpeg";
 
 const useStyles = makeStyles(theme => ({
   appBarTitle: {
-    flexGrow: 1
+    flexGrow: 1,
+    [theme.breakpoints.down("xs")]: {
+      display: "none"
+    }
   },
   logoImage: {
     height: "3em"
+  },
+  spacer: {
+    [theme.breakpoints.down("xs")]: {
+      flexGrow: 1
+    }
   },
   profilePhoto: {
     height: "2em",
@@ -26,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 interface AppBarProps {
   title: string;
   buttons: JSX.Element;
-  position?: 'fixed' | 'absolute' | 'sticky' | 'static' | 'relative';
+  position?: "fixed" | "absolute" | "sticky" | "static" | "relative";
 }
 
 function AppBar({ title, buttons, position }: AppBarProps) {
@@ -38,6 +46,7 @@ function AppBar({ title, buttons, position }: AppBarProps) {
         <Container maxWidth="md">
           <Box display="flex" alignItems="center">
             <img src={LogoJpeg} className={classes.logoImage} alt="logo" />
+            <Box className={classes.spacer} />
             <Typography variant="h6" className={classes.appBarTitle}>
               {title}
             </Typography>
