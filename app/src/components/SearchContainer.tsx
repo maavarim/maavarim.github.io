@@ -12,7 +12,7 @@ import {
   Dialog
 } from "@material-ui/core";
 import RecommendationView from "./RecommendationView";
-import HomeSearchIcon from "./custom-icons/HomeSearchIcon";
+import HomeSearchIcon from "../icons/HomeSearchIcon";
 import SearchFilter, { searchFilters } from "../searchFilters";
 import server from "../server";
 import ServerRecommendation from "../types/ServerRecommendation";
