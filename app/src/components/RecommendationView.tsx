@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Typography, makeStyles, Box, Button } from "@material-ui/core";
+import { Typography, makeStyles, Box } from "@material-ui/core";
 import {
   PlaceTwoTone,
   LabelTwoTone,
@@ -38,38 +38,26 @@ const useStyles = makeStyles(theme => ({
     }
   },
   buttonsConatiner: {
-    display: "grid",
-    gridTemplateColumns: "1fr",
+    display: "flex",
     [theme.breakpoints.up("xs")]: {
-      gridTemplateColumns: "repeat(2, 1fr)",
       borderTop: "1px solid #f7ecf9",
       "& .MuiButton-root": {
-        borderRadius: 0
+        borderRadius: 0,
+        flexGrow: 1
       }
-    }
-  },
-  moreDetailsButton: {
-    background: "#f9f9f9",
-    color: "#8e24aa"
-  },
-  addButton: {
-    background: "#9c27b0",
-    color: "#f1efef",
-    "&:hover": {
-      background: "rgba(156, 39, 176, 0.85)"
     }
   }
 }));
 
 interface RecommendationViewProps {
   recommendation: ServerRecommendation;
-  onShowMoreDetails?: () => void;
+  buttons?: JSX.Element;
   detailed?: boolean;
 }
 
 const RecommendationView = ({
   recommendation,
-  onShowMoreDetails,
+  buttons,
   detailed = false
 }: RecommendationViewProps) => {
   const classes = useStyles();
@@ -112,22 +100,7 @@ const RecommendationView = ({
           <Box>{formatForDisplaying(recommendation.healthCare)}</Box>
         </Box>
       </Box>
-      {!detailed && (
-        <Box className={classes.buttonsConatiner}>
-          {onShowMoreDetails && (
-            <Button
-              size="small"
-              className={classes.moreDetailsButton}
-              onClick={onShowMoreDetails}
-            >
-              פרטים נוספים
-            </Button>
-          )}
-          <Button size="small" className={classes.addButton}>
-            יש לי מה להוסיף!
-          </Button>
-        </Box>
-      )}
+      {buttons && <Box className={classes.buttonsConatiner}>{buttons}</Box>}
     </Fragment>
   );
 };

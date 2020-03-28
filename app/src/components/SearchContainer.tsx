@@ -16,6 +16,11 @@ import HomeSearchIcon from "./custom-icons/HomeSearchIcon";
 import SearchFilter, { searchFilters } from "../searchFilters";
 import server from "../server";
 import ServerRecommendation from "../types/ServerRecommendation";
+import {
+  PrimaryButton,
+  ContainedPrimaryButton,
+  DangerButton
+} from "./StyledButtons";
 
 const useStyles = makeStyles(theme => ({
   searchContainer: {
@@ -233,10 +238,25 @@ function SearchContainer() {
                 <CardContent style={{ padding: 0 }}>
                   <RecommendationView
                     recommendation={recommendation}
-                    onShowMoreDetails={() => {
-                      setFocusedRecommendation(recommendation);
-                      setIsFocusedRecommendationDialogOpen(true);
-                    }}
+                    buttons={
+                      <Fragment>
+                        <PrimaryButton
+                          size="small"
+                          onClick={() => {
+                            setFocusedRecommendation(recommendation);
+                            setIsFocusedRecommendationDialogOpen(true);
+                          }}
+                        >
+                          פרטים נוספים
+                        </PrimaryButton>
+                        <ContainedPrimaryButton
+                          size="small"
+                          onClick={console.log}
+                        >
+                          יש לי מה להוסיף!
+                        </ContainedPrimaryButton>
+                      </Fragment>
+                    }
                   />
                 </CardContent>
               </Card>
@@ -255,6 +275,16 @@ function SearchContainer() {
             <RecommendationView
               recommendation={focusedRecommendation}
               detailed
+              buttons={
+                <Fragment>
+                  <ContainedPrimaryButton size="small" onClick={console.log}>
+                    יש לי מה להוסיף!
+                  </ContainedPrimaryButton>
+                  <DangerButton size="small" onClick={console.log}>
+                    דיווח
+                  </DangerButton>
+                </Fragment>
+              }
             />
           )}
         </Box>
