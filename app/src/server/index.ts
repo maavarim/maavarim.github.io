@@ -3,6 +3,8 @@ import { fetchAuthenticated } from "../firebase/auth";
 import Recommendation from "../types/Recommendation";
 import ServerRecommendation from "../types/ServerRecommendation";
 
+import fetchRecommendationsMockData from "./mock-data/fetchRecommendations";
+
 const apiBase = Config.debug
   ? "http://localhost:5000/"
   : "https://maavarim.herokuapp.com/";
@@ -39,6 +41,10 @@ async function createRecommendation(
 async function fetchRecommendations(
   query: any
 ): Promise<ServerRecommendation[]> {
+  if (fetchRecommendationsMockData) {
+    return fetchRecommendationsMockData(query);
+  }
+
   const jsonRes = await (await get("recommendation/", query, false)).json();
   return jsonRes["recommendations"] as ServerRecommendation[];
 }

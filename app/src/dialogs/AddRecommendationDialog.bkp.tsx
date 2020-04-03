@@ -153,108 +153,11 @@ const AddRecommendationDialog = ({
                 הוספת מידע
               </Typography>
             </Box>
-            <Box className={classes.generalDetailsContainer}>
-              <TextField
-                fullWidth
-                label="שם"
-                value={name}
-                onChange={event => setName(event.target.value)}
-                color="secondary"
-                variant="filled"
-                placeholder="ישראל ישראלית"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AccountCircleTwoTone />
-                    </InputAdornment>
-                  )
-                }}
-                style={{ gridRow: 1, gridColumn: 1 }}
-              />
-              <TextField
-                fullWidth
-                label="טלפון"
-                value={phone}
-                onChange={event => setPhone(event.target.value)}
-                color="secondary"
-                variant="filled"
-                placeholder="053-1234567"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <CallTwoTone />
-                    </InputAdornment>
-                  )
-                }}
-                style={{ gridRow: 2, gridColumn: 1 }}
-              />
-              <TextField
-                fullWidth
-                label="כתובת"
-                value={location}
-                onChange={event => setLocation(event.target.value)}
-                variant="filled"
-                color="secondary"
-                placeholder="גולדשטיין 2, תל אביב-יפו"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PlaceTwoTone />
-                    </InputAdornment>
-                  )
-                }}
-                style={{ gridRow: 3, gridColumn: 1 }}
-              />
-              <Box
-                className={classes.topGridLeftColumn}
-                display="flex"
-                flexDirection="column"
-              >
-                <Box
-                  display="flex"
-                  pb={1}
-                  flexDirection="row"
-                  justifyContent="center"
-                >
-                  <Box mr={1}>
-                    <Typography color="textSecondary">דירוג: </Typography>
-                  </Box>
-                  <Rating
-                    name="rating"
-                    value={rating}
-                    onChange={(_, newValue) => setRating(newValue)}
-                  />
-                </Box>
-                <TextField
-                  label="פרטים נוספים"
-                  multiline
-                  className={classes.moreDetailsTextField}
-                  fullWidth
-                  rows={5}
-                  value={additionalInfo}
-                  onChange={event => setAdditionalInfo(event.target.value)}
-                  variant="filled"
-                  color="secondary"
-                />
-              </Box>
-            </Box>
+            
+            
+            
 
-            <Box className={classes.searchFilterContainer} mt={1}>
-              {searchFilters.map((searchFilter: SearchFilter) => (
-                <searchFilter.render
-                  key={searchFilter.filterKey}
-                  onChange={selectedOptions =>
-                    setSelectedFilters(
-                      setMap(
-                        selectedFilters,
-                        searchFilter.filterKey,
-                        selectedOptions
-                      )
-                    )
-                  }
-                />
-              ))}
-            </Box>
+            
 
             <Box display="flex" justifyContent="flex-end" mt={2}>
               <Box mr={1}>
