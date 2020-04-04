@@ -1,15 +1,8 @@
 import React, { Fragment, useState } from "react";
-import {
-  makeStyles,
-  Theme,
-  createStyles,
-  useTheme,
-} from "@material-ui/core/styles";
-import User from "../../types/User";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import {
   Box,
   Snackbar,
-  ContainerProps,
   Card,
   CardContent,
   Typography,
@@ -20,11 +13,11 @@ import {
   Button,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import MediaQueryBreakpoint from "../../types/MediaQueryBreakpoint";
 import Step1, { Step1ResultType } from "./Step1";
 import Step2, { Step2Result } from "./Step2";
 import Step3 from "./Step3";
 import ServerRecommendation from "../../types/ServerRecommendation";
+import { requireAuthenticated } from "../../hocs/requiredAuthenticated";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,17 +41,7 @@ function getSteps() {
   return ["מה השם?", "פרטים נוספים", "תגיות למיניהן"];
 }
 
-interface AddRecommendationScreenProps {
-  loggedInUser: User;
-}
-
-const AddRecommendationScreen = ({
-  loggedInUser,
-  ...props
-}: AddRecommendationScreenProps & ContainerProps) => {
-  const theme = useTheme();
-
-  const [maxWidth, setMaxWidth] = useState<MediaQueryBreakpoint>("xs");
+const AddRecommendationScreen = () => {
   const [isErrorSnackBarOpened, setIsErrorSnackBarOpened] = useState(false);
   const [isSuccessSnackBarOpened, setIsSuccessSnackBarOpened] = useState(false);
   const classes = useStyles();
@@ -120,7 +103,6 @@ const AddRecommendationScreen = ({
                 )}
                 {activeStep === 1 && (
                   <Step2
-                    loggedInUser={loggedInUser}
                     name={name}
                     existingRecommendation={existingRecommendation}
                     onResult={setStep2Result}
@@ -184,4 +166,4 @@ const AddRecommendationScreen = ({
   );
 };
 
-export default AddRecommendationScreen;
+export default requireAuthenticated(AddRecommendationScreen);

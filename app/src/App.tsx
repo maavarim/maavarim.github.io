@@ -4,7 +4,7 @@ import {
   Collapse,
   useTheme,
   Fade,
-  Container
+  Container,
 } from "@material-ui/core";
 import MainAppBar from "./components/MainAppBar";
 import Hero from "./components/Hero";
@@ -13,6 +13,7 @@ import LoginDialog from "./dialogs/LoginDialog";
 import User from "./types/User";
 import AdminDialogPanel from "./admin";
 import AddRecommendationScreen from "./dialogs/AddRecommendation";
+import LoggedInUserContext from "./context/LoggedInUserContext";
 
 function App() {
   const theme = useTheme();
@@ -20,92 +21,90 @@ function App() {
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [
     isAddRecommendationDialogOpen,
-    setIsAddRecommendationDialogOpen
+    setIsAddRecommendationDialogOpen,
   ] = useState(true);
   const [isAdminDialogOpen, setIsAdminDialogOpen] = useState(false);
 
   return (
     <React.Fragment>
       <CssBaseline />
-      <MainAppBar
-        setIsAdminDialogOpen={setIsAdminDialogOpen}
-        setIsLoginDialogOpen={setIsLoginDialogOpen}
-        loggedInUser={loggedInUser}
-        setLoggedInUser={setLoggedInUser}
-      />
-      <main>
-        <Collapse
-          in={!isAddRecommendationDialogOpen}
-          timeout={300}
-          style={{
-            transitionDelay: isAddRecommendationDialogOpen ? "0s" : "200ms"
-          }}
-        >
-          <Hero
-            isLoggedIn={loggedInUser !== null}
-            onLoginButtonClick={() => setIsLoginDialogOpen(true)}
-            onAddButtonClick={() => setIsAddRecommendationDialogOpen(true)}
-          />
-        </Collapse>
-
-        {!isAddRecommendationDialogOpen && (
-          <Fade
+      <LoggedInUserContext.Provider value={loggedInUser}>
+        <MainAppBar
+          setIsAdminDialogOpen={setIsAdminDialogOpen}
+          setIsLoginDialogOpen={setIsLoginDialogOpen}
+          setLoggedInUser={setLoggedInUser}
+        />
+        <main>
+          <Collapse
             in={!isAddRecommendationDialogOpen}
-            timeout={{
-              enter: 300,
-              exit: !isAddRecommendationDialogOpen ? 1 : 290
-            }}
+            timeout={300}
             style={{
-              transitionDelay: isAddRecommendationDialogOpen ? "200ms" : "0s"
+              transitionDelay: isAddRecommendationDialogOpen ? "0s" : "200ms",
             }}
           >
-            <Container
-              maxWidth="md"
+            <Hero
+              onLoginButtonClick={() => setIsLoginDialogOpen(true)}
+              onAddButtonClick={() => setIsAddRecommendationDialogOpen(true)}
+            />
+          </Collapse>
+
+          {!isAddRecommendationDialogOpen && (
+            <Fade
+              in={!isAddRecommendationDialogOpen}
+              timeout={{
+                enter: 300,
+                exit: !isAddRecommendationDialogOpen ? 1 : 290,
+              }}
               style={{
-                position: "relative",
-                marginTop: -`${theme.spacing(4)}px`
+                transitionDelay: isAddRecommendationDialogOpen ? "200ms" : "0s",
               }}
             >
-              <SearchContainer />
-            </Container>
-          </Fade>
-        )}
+              <Container
+                maxWidth="md"
+                style={{
+                  position: "relative",
+                  marginTop: -`${theme.spacing(4)}px`,
+                }}
+              >
+                <SearchContainer />
+              </Container>
+            </Fade>
+          )}
 
-        {isAddRecommendationDialogOpen && (
-          <Fade
-            in={isAddRecommendationDialogOpen}
-            timeout={{
-              enter: 300,
-              exit: isAddRecommendationDialogOpen ? 1 : 290
-            }}
-            style={{
-              transitionDelay: isAddRecommendationDialogOpen ? "200ms" : "0s"
-            }}
-          >
-            <Container
-              maxWidth="sm"
+          {isAddRecommendationDialogOpen && (
+            <Fade
+              in={isAddRecommendationDialogOpen}
+              timeout={{
+                enter: 300,
+                exit: isAddRecommendationDialogOpen ? 1 : 290,
+              }}
               style={{
-                position: "relative",
-                marginTop: `${theme.spacing(3)}px`
+                transitionDelay: isAddRecommendationDialogOpen ? "200ms" : "0s",
               }}
             >
-              {loggedInUser !== null && (
-                <AddRecommendationScreen loggedInUser={loggedInUser} />
-              )}
-            </Container>
-          </Fade>
-        )}
-      </main>
+              <Container
+                maxWidth="sm"
+                style={{
+                  position: "relative",
+                  marginTop: `${theme.spacing(3)}px`,
+                }}
+              >
+                  <AddRecommendationScreen />
+              </Container>
+            </Fade>
+          )}
+        </main>
 
-      <LoginDialog
-        open={isLoginDialogOpen}
-        setOpen={setIsLoginDialogOpen}
-        setLoggedInUser={setLoggedInUser}
-      />
-      <AdminDialogPanel
-        open={isAdminDialogOpen}
-        onClose={() => setIsAdminDialogOpen(false)}
-      />
+        <LoginDialog
+          open={isLoginDialogOpen}
+          setOpen={setIsLoginDialogOpen}
+          setLoggedInUser={setLoggedInUser}
+        />
+        <AdminDialogPanel
+          open={isAdminDialogOpen}
+          onClose={() => setIsAdminDialogOpen(false)}
+        />
+      </LoggedInUserContext.Provider>
     </React.Fragment>
   );
 }

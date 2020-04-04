@@ -1,28 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Container,
   Typography,
   makeStyles,
   Box,
   ButtonBase,
-  Paper
+  Paper,
 } from "@material-ui/core";
+import LoggedInUserContext from "../context/LoggedInUserContext";
 
 const GRADIENT =
   "rgba(255,255,255,1) 0%, rgba(245,172,202,1) 50%, rgba(107,175,225,1) 100%";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
     flexDirection: "row",
     alignItems: "stretch",
-    background: "white"
+    background: "white",
   },
   content: {
     padding: theme.spacing(8, 0, 10),
     [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(8, 2, 10, 2)
-    }
+      padding: theme.spacing(8, 2, 10, 2),
+    },
   },
   cta: {
     all: "unset",
@@ -33,26 +34,27 @@ const useStyles = makeStyles(theme => ({
     position: "relative",
     borderRadius: ".25em",
     border: "1px currentColor solid",
-    cursor: "pointer"
+    cursor: "pointer",
   },
   rightGradient: {
     width: `calc(50vw - ${theme.breakpoints.values.md / 2}px)`,
-    background: `linear-gradient(90deg, ${GRADIENT})`
+    background: `linear-gradient(90deg, ${GRADIENT})`,
   },
   leftGradient: {
     width: `calc(50vw - ${theme.breakpoints.values.md / 2}px)`,
-    background: `linear-gradient(270deg, ${GRADIENT})`
-  }
+    background: `linear-gradient(270deg, ${GRADIENT})`,
+  },
 }));
 
 interface HeroProps {
   onLoginButtonClick: () => void;
   onAddButtonClick: () => void;
-  isLoggedIn: boolean;
 }
 
-function Hero({ onLoginButtonClick, onAddButtonClick, isLoggedIn }: HeroProps) {
+function Hero({ onLoginButtonClick, onAddButtonClick }: HeroProps) {
   const classes = useStyles();
+  const loggedInUser = useContext(LoggedInUserContext);
+  const isLoggedIn = loggedInUser !== null;
 
   return (
     <Paper className={classes.container} elevation={2}>

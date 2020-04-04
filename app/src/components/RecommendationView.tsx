@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Typography, makeStyles, Box, BoxProps } from "@material-ui/core";
+import { Typography, makeStyles, Box } from "@material-ui/core";
 import {
   PlaceTwoTone,
   LabelTwoTone,

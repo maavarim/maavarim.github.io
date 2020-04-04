@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import {
   Box,
   TextField,
@@ -14,10 +14,7 @@ import { AccountCircleTwoTone } from "@material-ui/icons";
 import ServerRecommendation from "../../types/ServerRecommendation";
 import server from "../../server";
 import RecommendationsContainer from "../../components/RecommendationsContainer";
-import {
-  ContainedPrimaryButton,
-  PrimaryButton,
-} from "../../components/StyledButtons";
+import { ContainedPrimaryButton } from "../../components/StyledButtons";
 import { isBlankOrEmpty } from "../../utils/String";
 
 const useStyles = makeStyles((theme) => ({

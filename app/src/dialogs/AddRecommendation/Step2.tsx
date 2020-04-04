@@ -5,7 +5,6 @@ import {
   TextField,
   InputAdornment,
   Typography,
-  Button,
 } from "@material-ui/core";
 import SearchFilter, { searchFilters } from "../../searchFilters";
 import {
@@ -24,6 +23,10 @@ import Recommendation from "../../types/Recommendation";
 import { isBlankOrEmpty } from "../../utils/String";
 import { iterableSome } from "../../utils/Array";
 import User from "../../types/User";
+import {
+  WithAuthenticatedProps,
+  withAuthenticated,
+} from "../../hocs/requiredAuthenticated";
 
 const useStyles = makeStyles((theme) => ({
   fieldsContainer: {
@@ -70,7 +73,7 @@ export type Step2Result =
       newRecommendation: Recommendation;
     };
 
-interface Step2Props {
+interface Step2Props extends WithAuthenticatedProps {
   loggedInUser: User;
   name: string | null;
   existingRecommendation: ServerRecommendation | null;
@@ -260,4 +263,5 @@ const Step2 = ({
     </Fragment>
   );
 };
-export default Step2;
+
+export default withAuthenticated(Step2);
