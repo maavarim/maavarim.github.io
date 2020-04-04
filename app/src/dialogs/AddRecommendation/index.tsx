@@ -21,8 +21,8 @@ import {
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import MediaQueryBreakpoint from "../../types/MediaQueryBreakpoint";
-import Step1 from "./Step1";
-import Step2 from "./Step2";
+import Step1, { Step1ResultType } from "./Step1";
+import Step2, { Step2Result } from "./Step2";
 import Step3 from "./Step3";
 import ServerRecommendation from "../../types/ServerRecommendation";
 
@@ -46,37 +46,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function getSteps() {
   return ["מה השם?", "פרטים נוספים", "תגיות למיניהן"];
-}
-
-function getStepContent(
-  step: number,
-  handleBack: () => void,
-  handleNext: () => void,
-  setName: (name: string) => void,
-  setExistingRecommendation: (
-    serverRecommendation: ServerRecommendation
-  ) => void
-): JSX.Element {
-  switch (step) {
-    case 0:
-      return (
-        <Step1
-          onResult={(name) => {
-            setName(name);
-            handleNext();
-          }}
-          setExistingRecommendation={(serverRecommendation) => {
-            setExistingRecommendation(serverRecommendation);
-            handleNext();
-          }}
-        />
-      );
-    case 1:
-      return <Step2 />;
-    case 2:
-      return <Step3 />;
-  }
-  return <Box />;
 }
 
 interface AddRecommendationScreenProps {
@@ -108,11 +77,19 @@ const AddRecommendationScreen = ({
     setActiveStep(0);
   };
 
+  // Step 1 result
   const [name, setName] = useState<string | null>(null);
   const [
     existingRecommendation,
     setExistingRecommendation,
   ] = useState<ServerRecommendation | null>(null);
+
+  // Step 2 result
+  const [step2Result, setStep2Result] = useState<Step2Result | null>(null);
+
+  // Step 3 result
+  const [rating, setRating] = useState<number | null>(null);
+  const [moreDetails, setMoreDetails] = useState<string | null>(null);
 
   return (
     <Fragment>
@@ -127,12 +104,33 @@ const AddRecommendationScreen = ({
               </Box>
 
               <Box>
-                {getStepContent(
-                  activeStep,
-                  handleBack,
-                  handleNext,
-                  setName,
-                  setExistingRecommendation
+                {activeStep === 0 && (
+                  <Step1
+                    onResult={(result) => {
+                      switch (result.type) {
+                        case Step1ResultType.createNew:
+                          setName(result.name);
+                          return handleNext();
+                        case Step1ResultType.useExisting:
+                          setExistingRecommendation(result.recommendation);
+                          return handleNext();
+                      }
+                    }}
+                  />
+                )}
+                {activeStep === 1 && (
+                  <Step2
+                    loggedInUser={loggedInUser}
+                    name={name}
+                    existingRecommendation={existingRecommendation}
+                    onResult={setStep2Result}
+                  />
+                )}
+                {activeStep === 2 && (
+                  <Step3
+                    setRating={setRating}
+                    setMoreDetails={setMoreDetails}
+                  />
                 )}
               </Box>
               <Stepper activeStep={activeStep} alternativeLabel>

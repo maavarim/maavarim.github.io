@@ -10,7 +10,7 @@ import {
   InputAdornment,
   Button,
   Dialog,
-  ContainerProps
+  ContainerProps,
 } from "@material-ui/core";
 import RecommendationView from "./RecommendationView";
 import HomeSearchIcon from "../icons/HomeSearchIcon";
@@ -20,37 +20,37 @@ import ServerRecommendation from "../types/ServerRecommendation";
 import {
   PrimaryButton,
   ContainedPrimaryButton,
-  DangerButton
+  DangerButton,
 } from "./StyledButtons";
 import RecommendationsContainer from "./RecommendationsContainer";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   fieldsContainer: {
     display: "grid",
     gridGap: theme.spacing(1),
     gridTemplateColumns: "repeat(2, 1fr)",
     [theme.breakpoints.down("xs")]: {
-      gridTemplateColumns: "1fr"
-    }
+      gridTemplateColumns: "1fr",
+    },
   },
   freeTextField: {
     gridRow: 1,
     gridColumn: "1 / 3",
     [theme.breakpoints.down("xs")]: {
-      gridColumn: 1
-    }
+      gridColumn: 1,
+    },
   },
   resultsContainer: {
     display: "grid",
     gridGap: theme.spacing(1),
     gridTemplateColumns: "repeat(3, 1fr)",
     [theme.breakpoints.only("xs")]: {
-      gridTemplateColumns: "repeat(2, 1fr)"
+      gridTemplateColumns: "repeat(2, 1fr)",
     },
     [theme.breakpoints.down("xs")]: {
-      gridTemplateColumns: "1fr"
-    }
-  }
+      gridTemplateColumns: "1fr",
+    },
+  },
 }));
 
 type SelectedFilterApplicatorsState = Map<string, string[]>;
@@ -87,17 +87,17 @@ function SearchContainer(props: ContainerProps) {
 
   const [
     focusedRecommendation,
-    setFocusedRecommendation
+    setFocusedRecommendation,
   ] = useState<ServerRecommendation | null>(null);
   const [
     isFocusedRecommendationDialogOpen,
-    setIsFocusedRecommendationDialogOpen
+    setIsFocusedRecommendationDialogOpen,
   ] = useState(false);
 
   const fetchResults = () => {
     const searchQuery = {
       freeText: freeTextQuery,
-      ...Object.fromEntries(selectedFilters)
+      ...Object.fromEntries(selectedFilters),
     };
 
     server
@@ -124,7 +124,7 @@ function SearchContainer(props: ContainerProps) {
                 className={classes.freeTextField}
                 label="חיפוש חופשי"
                 value={freeTextQuery}
-                onChange={event => setFreeTextQuery(event.target.value)}
+                onChange={(event) => setFreeTextQuery(event.target.value)}
                 color="secondary"
                 variant="filled"
                 InputProps={{
@@ -132,17 +132,18 @@ function SearchContainer(props: ContainerProps) {
                     <InputAdornment position="start">
                       <HomeSearchIcon />
                     </InputAdornment>
-                  )
+                  ),
                 }}
               />
               {searchFilters.map((searchFilter: SearchFilter) => (
                 <searchFilter.render
                   key={searchFilter.filterKey}
-                  onChange={selectedOptions =>
+                  value={selectedFilters.get(searchFilter.filterKey) ?? []}
+                  onChange={(selectedOptions) =>
                     dispathSelectedFiltersAction({
                       type: "change",
                       filterKey: searchFilter.filterKey,
-                      selectedOptions
+                      selectedOptions,
                     })
                   }
                 />
@@ -163,7 +164,7 @@ function SearchContainer(props: ContainerProps) {
       {results !== null && (
         <RecommendationsContainer
           recommendations={results}
-          buttons={recommendation => (
+          buttons={(recommendation) => (
             <Fragment>
               <PrimaryButton
                 size="small"

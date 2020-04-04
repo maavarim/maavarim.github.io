@@ -14,7 +14,11 @@ import { AccountCircleTwoTone } from "@material-ui/icons";
 import ServerRecommendation from "../../types/ServerRecommendation";
 import server from "../../server";
 import RecommendationsContainer from "../../components/RecommendationsContainer";
-import { ContainedPrimaryButton, PrimaryButton } from "../../components/StyledButtons";
+import {
+  ContainedPrimaryButton,
+  PrimaryButton,
+} from "../../components/StyledButtons";
+import { isBlankOrEmpty } from "../../utils/String";
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -56,14 +60,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Step1Props {
-  onResult: (name: string) => void;
-  setExistingRecommendation: (
-    serverRecommendation: ServerRecommendation
-  ) => void;
+export enum Step1ResultType {
+  useExisting,
+  createNew,
 }
 
-const Step1 = ({ onResult, setExistingRecommendation }: Step1Props) => {
+type Step1Result =
+  | {
+      type: Step1ResultType.useExisting;
+      recommendation: ServerRecommendation;
+    }
+  | {
+      type: Step1ResultType.createNew;
+      name: string;
+    };
+
+interface Step1Props {
+  onResult: (result: Step1Result) => void;
+}
+
+const Step1 = ({ onResult }: Step1Props) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -84,7 +100,14 @@ const Step1 = ({ onResult, setExistingRecommendation }: Step1Props) => {
 
     server
       .fetchRecommendations(searchQuery)
-      .then(setSuggestions)
+      .then((suggestions) => {
+        if (suggestions.length === 0)
+          onResult({
+            type: Step1ResultType.createNew,
+            name,
+          });
+        else setSuggestions(suggestions);
+      })
       .catch(console.error);
   };
 
@@ -119,6 +142,7 @@ const Step1 = ({ onResult, setExistingRecommendation }: Step1Props) => {
           className={classes.button}
           disableElevation
           onClick={fetchSuggestions}
+          disabled={isBlankOrEmpty(name)}
         >
           הבא
         </Button>
@@ -146,7 +170,12 @@ const Step1 = ({ onResult, setExistingRecommendation }: Step1Props) => {
               buttons={(recommendation) => (
                 <ContainedPrimaryButton
                   size="small"
-                  onClick={() => setExistingRecommendation(recommendation)}
+                  onClick={() =>
+                    onResult({
+                      type: Step1ResultType.useExisting,
+                      recommendation,
+                    })
+                  }
                 >
                   כן, זה אותו המקום!
                 </ContainedPrimaryButton>
@@ -158,7 +187,12 @@ const Step1 = ({ onResult, setExistingRecommendation }: Step1Props) => {
           </Paper>
           <Box mt={3} mb={2}>
             <ContainedPrimaryButton
-              onClick={() => onResult(name)}
+              onClick={() =>
+                onResult({
+                  type: Step1ResultType.createNew,
+                  name,
+                })
+              }
               fullWidth
               variant="contained"
             >

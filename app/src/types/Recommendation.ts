@@ -1,7 +1,7 @@
 interface Recommendation {
   authorEmail: string;
   name: string;
-  rating: number;
+  rating?: number;
   phone?: string;
   location?: string;
   additionalInfo?: string;

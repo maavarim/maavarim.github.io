@@ -16,11 +16,8 @@ function getSelectBasedSearchFilterRenderer(
   options: string[]
 ): SearchFilterRenderer {
   return props => {
-    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
       const updatedSelectedOptions = event.target.value as string[];
-      setSelectedOptions(updatedSelectedOptions);
       props.onChange(updatedSelectedOptions);
     };
 
@@ -31,13 +28,14 @@ function getSelectBasedSearchFilterRenderer(
           labelId={`select-${fieldName}`}
           multiple
           renderValue={selected => formatForDisplaying(selected as string[])}
-          value={selectedOptions ?? []}
+          value={props.value}
           onChange={handleChange}
+          {...(props.selectProps ?? {})}
         >
           {options.map((option, optionIndex) => (
             <MenuItem value={option} key={optionIndex}>
               <Checkbox
-                checked={(selectedOptions?.indexOf(option) ?? -1) > -1}
+                checked={(props.value?.indexOf(option) ?? -1) > -1}
               />
               <ListItemText primary={option} />
             </MenuItem>

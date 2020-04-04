@@ -4,9 +4,12 @@ import areaSearchFilter from "./area";
 import healthCareSearchFilter from "./healthCare";
 import languageSearchFilter from "./language";
 import genderSearchFilter from "./gender";
+import { SelectProps } from "@material-ui/core";
 
 interface SearchFilterProps {
+  value: string[];
   onChange: (selectedOptions: string[]) => void;
+  selectProps?: SelectProps;
 }
 
 export type SearchFilterRenderer = (props: SearchFilterProps) => JSX.Element;
@@ -22,7 +25,7 @@ export const searchFilters = [
   areaSearchFilter,
   healthCareSearchFilter,
   languageSearchFilter,
-  genderSearchFilter
+  genderSearchFilter,
 ];
 
 export default SearchFilter;
