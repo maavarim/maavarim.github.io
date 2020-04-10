@@ -38,15 +38,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function getSteps() {
-  return ["מה השם?", "פרטים נוספים", "תגיות למיניהן"];
+  return ["מה השם?", "פרטים נוספים", "דירוג"];
 }
+
+const steps = getSteps();
 
 const AddRecommendationScreen = () => {
   const [isErrorSnackBarOpened, setIsErrorSnackBarOpened] = useState(false);
   const [isSuccessSnackBarOpened, setIsSuccessSnackBarOpened] = useState(false);
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const steps = getSteps();
+  const [activeStep, setActiveStep] = React.useState(2);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -72,7 +73,7 @@ const AddRecommendationScreen = () => {
 
   // Step 3 result
   const [rating, setRating] = useState<number | null>(null);
-  const [moreDetails, setMoreDetails] = useState<string | null>(null);
+  const [moreDetails, setMoreDetails] = useState<string>("");
 
   return (
     <Fragment>
@@ -82,7 +83,7 @@ const AddRecommendationScreen = () => {
             <div className={classes.root}>
               <Box mb={2}>
                 <Typography variant="h5" color="textPrimary">
-                  הוספת מידע
+                  הוספת מידע - {steps[activeStep]}
                 </Typography>
               </Box>
 
@@ -105,13 +106,21 @@ const AddRecommendationScreen = () => {
                   <Step2
                     name={name}
                     existingRecommendation={existingRecommendation}
-                    onResult={setStep2Result}
+                    handleBack={handleBack}
+                    onResult={(result) => {
+                      setStep2Result(result);
+                      handleNext();
+                    }}
                   />
                 )}
                 {activeStep === 2 && (
                   <Step3
+                    rating={rating}
                     setRating={setRating}
+                    moreDetails={moreDetails}
                     setMoreDetails={setMoreDetails}
+                    handleBack={handleBack}
+                    handleNext={handleNext}
                   />
                 )}
               </Box>

@@ -5,6 +5,7 @@ import {
   TextField,
   InputAdornment,
   Typography,
+  Button,
 } from "@material-ui/core";
 import SearchFilter, { searchFilters } from "../../searchFilters";
 import {
@@ -78,6 +79,7 @@ interface Step2Props extends WithAuthenticatedProps {
   name: string | null;
   existingRecommendation: ServerRecommendation | null;
   onResult: (result: Step2Result) => void;
+  handleBack: () => void;
 }
 
 const Step2 = ({
@@ -85,6 +87,7 @@ const Step2 = ({
   name,
   existingRecommendation,
   onResult,
+  handleBack,
 }: Step2Props) => {
   const classes = useStyles();
 
@@ -249,7 +252,11 @@ const Step2 = ({
               />
             ))}
           </Box>
-          <Box display="flex" justifyContent="flex-end" mt={3}>
+          <Box display="flex" justifyContent="space-between" mt={3}>
+            <Button variant="outlined" onClick={handleBack}>
+              חזרה לבחירת שם
+            </Button>
+
             <ContainedPrimaryButton
               variant="contained"
               onClick={handleNextClick}
