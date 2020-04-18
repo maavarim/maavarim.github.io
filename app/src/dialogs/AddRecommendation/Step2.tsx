@@ -14,13 +14,12 @@ import {
   AccountCircleTwoTone,
 } from "@material-ui/icons";
 import { setMap } from "../../utils/Map";
-import ServerRecommendation from "../../types/ServerRecommendation";
-import RecommendationView from "../../components/RecommendationView";
+import BusinessView from "../../components/BusinessView";
 import {
   ContainedPrimaryButton,
   PrimaryButton,
 } from "../../components/StyledButtons";
-import Recommendation from "../../types/Recommendation";
+import Business, { BusinessInfo } from "../../types/Business";
 import { isBlankOrEmpty } from "../../utils/String";
 import { iterableSome } from "../../utils/Array";
 import User from "../../types/User";
@@ -28,6 +27,7 @@ import {
   WithAuthenticatedProps,
   withAuthenticated,
 } from "../../hocs/requiredAuthenticated";
+import { BusinessResult, BusinessResultType } from "../../types/Proposal";
 
 const useStyles = makeStyles((theme) => ({
   fieldsContainer: {
@@ -53,54 +53,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export enum Step2ResultType {
-  useExisting,
-  alterExisting,
-  createNew,
-}
-
-export type Step2Result =
-  | {
-      type: Step2ResultType.useExisting;
-      existingRecommendation: ServerRecommendation;
-    }
-  | {
-      type: Step2ResultType.alterExisting;
-      existingRecommendation: ServerRecommendation;
-      newRecommendation: Recommendation;
-    }
-  | {
-      type: Step2ResultType.createNew;
-      newRecommendation: Recommendation;
-    };
-
 interface Step2Props extends WithAuthenticatedProps {
   loggedInUser: User;
   name: string | null;
-  existingRecommendation: ServerRecommendation | null;
-  onResult: (result: Step2Result) => void;
+  existingBusiness: Business | null;
+  onResult: (business: BusinessResult) => void;
   handleBack: () => void;
 }
 
 const Step2 = ({
   loggedInUser,
   name,
-  existingRecommendation,
+  existingBusiness,
   onResult,
   handleBack,
 }: Step2Props) => {
   const classes = useStyles();
 
   const [location, setLocation] = useState(
-    existingRecommendation?.location ?? ""
+    existingBusiness?.info.location ?? ""
   );
-  const [phone, setPhone] = useState(existingRecommendation?.phone ?? "");
+  const [phone, setPhone] = useState(existingBusiness?.info.phone ?? "");
   const [selectedFilters, setSelectedFilters] = useState<Map<string, string[]>>(
     new Map(
       searchFilters.map((searchFilter) => [
         searchFilter.filterKey,
-        existingRecommendation
-          ? Object.entries(existingRecommendation).find(
+        existingBusiness
+          ? Object.entries(existingBusiness.info).find(
               ([filterName]) => filterName === searchFilter.filterKey
             )?.[1] ?? []
           : [],
@@ -108,12 +87,12 @@ const Step2 = ({
     )
   );
 
-  const [editMode, setEditMode] = useState(existingRecommendation === null);
+  const [editMode, setEditMode] = useState(existingBusiness === null);
   const isInvalidRecommendation =
     ((name === null || isBlankOrEmpty(name)) &&
-      (existingRecommendation === null ||
-        existingRecommendation.name === null ||
-        isBlankOrEmpty(existingRecommendation.name))) ||
+      (existingBusiness === null ||
+        existingBusiness.name === null ||
+        isBlankOrEmpty(existingBusiness.name))) ||
     iterableSome(
       selectedFilters.entries(),
       ([_, selectedOptions]) => selectedOptions.length === 0
@@ -122,38 +101,41 @@ const Step2 = ({
   const handleNextClick = () => {
     if (isInvalidRecommendation) return;
 
-    const newRecommendation = ({
+    const businessInfo = ({
       authorEmail: loggedInUser.email,
-      name,
       phone,
       location,
 
       ...Object.fromEntries(selectedFilters.entries()),
 
       accepted: false,
-    } as unknown) as Recommendation;
+    } as unknown) as BusinessInfo;
 
     onResult(
-      existingRecommendation === null
-        ? { type: Step2ResultType.createNew, newRecommendation }
+      existingBusiness === null
+        ? {
+            type: BusinessResultType.createNew,
+            business: {
+              name: name || "",
+              info: businessInfo,
+            },
+          }
         : {
-            type: Step2ResultType.alterExisting,
-            existingRecommendation,
-            newRecommendation,
+            type: BusinessResultType.alterExisting,
+            business: {
+              name: existingBusiness.name,
+              info: businessInfo,
+            },
           }
     );
   };
 
   return (
     <Fragment>
-      {existingRecommendation && !editMode && (
+      {existingBusiness !== null && !editMode && (
         <Fragment>
           <Typography variant="body1">הפרטים הבאים נכונים?</Typography>
-          <RecommendationView
-            rating={false}
-            detailed
-            recommendation={existingRecommendation}
-          />
+          <BusinessView rating={false} detailed business={existingBusiness} />
           <Box className={classes.dualColumnGrid} mt={1}>
             <PrimaryButton variant="outlined" onClick={() => setEditMode(true)}>
               לא, אני רוצה לערוך אותם
@@ -162,8 +144,8 @@ const Step2 = ({
               variant="outlined"
               onClick={() =>
                 onResult({
-                  type: Step2ResultType.useExisting,
-                  existingRecommendation,
+                  type: BusinessResultType.useExisting,
+                  business: existingBusiness,
                 })
               }
             >
@@ -173,7 +155,7 @@ const Step2 = ({
         </Fragment>
       )}
 
-      {(existingRecommendation === null || editMode) && (
+      {(existingBusiness === null || editMode) && (
         <Fragment>
           <Box mt={1} mb={1}>
             <Typography variant="h6">פרטים כלליים</Typography>
@@ -182,7 +164,7 @@ const Step2 = ({
             <TextField
               fullWidth
               label="שם"
-              value={existingRecommendation?.name ?? name ?? ""}
+              value={existingBusiness?.name ?? name ?? ""}
               className={classes.nameTextField}
               color="secondary"
               variant="filled"

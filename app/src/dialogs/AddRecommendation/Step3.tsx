@@ -17,7 +17,7 @@ const useStyles = makeStyles({
   },
 });
 
-interface Step2Props {
+interface Step3Props {
   rating: number | null;
   setRating: (rating: number | null) => void;
   moreDetails: string;
@@ -25,6 +25,7 @@ interface Step2Props {
   handleBack: () => void;
   handleNext: () => void;
 }
+
 const Step3 = ({
   rating,
   setRating,
@@ -32,7 +33,7 @@ const Step3 = ({
   setMoreDetails,
   handleBack,
   handleNext,
-}: Step2Props) => {
+}: Step3Props) => {
   const classes = useStyles();
 
   return (
@@ -40,10 +41,14 @@ const Step3 = ({
       <Typography variant="body1">
         עוד רגע מסיימים!
         <br />
-        איך היית מדרג את החוויה הכללית אצל נותן.ת השירות?
+        איך היית מדרג.ת את החוויה הכללית אצל נותן.ת השירות?
       </Typography>
       <Box display="flex" justifyContent="center" mt={1} mb={2}>
-        <Rating value={rating} onChange={(_, value) => setRating(value)} />
+        <Rating
+          value={rating}
+          name="rating"
+          onChange={(_, value) => setRating(value)}
+        />
       </Box>
 
       <Typography variant="body1">
@@ -57,7 +62,6 @@ const Step3 = ({
           rows={4}
           variant="filled"
           value={moreDetails}
-          name="more-details"
           placeholder="בוודאי!"
           onChange={(e) => setMoreDetails(e.target.value)}
         />
@@ -73,7 +77,7 @@ const Step3 = ({
           onClick={handleNext}
           disabled={rating === null}
         >
-          סיום!
+          הבא
         </ContainedPrimaryButton>
       </Box>
     </Box>

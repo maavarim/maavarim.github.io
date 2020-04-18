@@ -1,40 +1,71 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
-import RecommendationService from "../services/RecommendationService";
 import parseQueryMiddleware from "../middleware/parseQuery";
 import errorMiddleware from "../middleware/error";
 import validationMiddleware from "../middleware/validation";
-import CreateRecommendationDTO from "../dtos/CreateRecommendation";
-import FindRecommendationDTO from "../dtos/FindRecommendation";
 import { requireAuthenticated } from "../middleware/auth";
+
+import { BusinessProposalType } from "../types/Proposal";
+
 import HttpException from "../exceptions/HttpException";
+
+import ReviewService from "../services/ReviewService";
+import BusinessService from "../services/BusinessService";
+
+import ProposalDTO from "../dtos/Proposal";
+import FindBusinessesDTO from "../dtos/FindBusinesses";
 
 const initializeRoutes = (app: express.Application) => {
   app.post(
-    "/recommendation/",
+    "/propose/",
     requireAuthenticated,
-    validationMiddleware(CreateRecommendationDTO),
+    validationMiddleware(ProposalDTO),
     async (req, res) => {
-      const recommendation: CreateRecommendationDTO = req.body;
-      if (recommendation.authorEmail !== req.userInfo.email) {
+      const proposal: ProposalDTO = req.body;
+
+      if (proposal.author.email !== req.userInfo.email) {
         throw new HttpException(
           400,
           "Recommendation.authorEmail doesn't match logged in user's email."
         );
       }
 
-      const newRecord = await RecommendationService.create(recommendation);
-      return res.json({ recommendation: newRecord });
+      switch (proposal.business.type) {
+        case BusinessProposalType.useExisting:
+          break;
+        case BusinessProposalType.createNew:
+          BusinessService.proposeNew({
+            author: proposal.author,
+            businessName: proposal.business.business.name,
+            businessInfo: proposal.business.business.info,
+          });
+          break;
+        case BusinessProposalType.alterExisting:
+          BusinessService.proposeAltering({
+            author: proposal.author,
+            businessName: proposal.business.business.name,
+            businessInfo: proposal.business.business.info,
+          });
+          break;
+      }
+
+      ReviewService.propose({
+        author: proposal.author,
+        businessName: proposal.business.business.name,
+        review: proposal.review,
+      });
+
+      return res.json({});
     }
   );
 
   app.get(
     "/recommendation/",
-    validationMiddleware(FindRecommendationDTO),
+    validationMiddleware(FindBusinessesDTO),
     async (req, res) => {
-      const filters: FindRecommendationDTO = req.query;
-      const recommendations = await RecommendationService.find(filters);
+      const findRecommendationDTO: FindBusinessesDTO = req.query;
+      const recommendations = await BusinessService.find(findRecommendationDTO);
       return res.json({ recommendations });
     }
   );
@@ -44,7 +75,7 @@ const initializeBodyParsers = (app: express.Application) => {
   app.use(parseQueryMiddleware());
   app.use(
     bodyParser.urlencoded({
-      extended: true
+      extended: true,
     })
   );
   app.use(bodyParser.json());

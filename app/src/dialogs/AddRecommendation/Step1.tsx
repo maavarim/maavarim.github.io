@@ -11,11 +11,11 @@ import {
   Typography,
 } from "@material-ui/core";
 import { AccountCircleTwoTone } from "@material-ui/icons";
-import ServerRecommendation from "../../types/ServerRecommendation";
 import server from "../../server";
-import RecommendationsContainer from "../../components/RecommendationsContainer";
 import { ContainedPrimaryButton } from "../../components/StyledButtons";
 import { isBlankOrEmpty } from "../../utils/String";
+import Business from "../../types/Business";
+import BusinessesContainer from "../../components/BusinessesContainer";
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -65,11 +65,11 @@ export enum Step1ResultType {
 type Step1Result =
   | {
       type: Step1ResultType.useExisting;
-      recommendation: ServerRecommendation;
+      business: Business;
     }
   | {
       type: Step1ResultType.createNew;
-      name: string;
+      businessName: string;
     };
 
 interface Step1Props {
@@ -80,8 +80,8 @@ const Step1 = ({ onResult }: Step1Props) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const [name, setName] = useState("");
-  const [suggestions, setSuggestions] = useState<ServerRecommendation[] | null>(
+  const [businessName, setBusinessName] = useState("");
+  const [suggestions, setSuggestions] = useState<Business[] | null>(
     null
   );
 
@@ -92,16 +92,16 @@ const Step1 = ({ onResult }: Step1Props) => {
 
   const fetchSuggestions = () => {
     const searchQuery = {
-      freeText: name,
+      freeText: businessName,
     };
 
     server
-      .fetchRecommendations(searchQuery)
+      .fetchBusinesses(searchQuery)
       .then((suggestions) => {
         if (suggestions.length === 0)
           onResult({
             type: Step1ResultType.createNew,
-            name,
+            businessName,
           });
         else setSuggestions(suggestions);
       })
@@ -119,9 +119,9 @@ const Step1 = ({ onResult }: Step1Props) => {
         <TextField
           fullWidth
           label="שם"
-          value={name}
+          value={businessName}
           className={classes.textField}
-          onChange={(event) => setName(event.target.value)}
+          onChange={(event) => setBusinessName(event.target.value)}
           color="secondary"
           variant="filled"
           placeholder="ישראל ישראלית"
@@ -139,7 +139,7 @@ const Step1 = ({ onResult }: Step1Props) => {
           className={classes.button}
           disableElevation
           onClick={fetchSuggestions}
-          disabled={isBlankOrEmpty(name)}
+          disabled={isBlankOrEmpty(businessName)}
         >
           הבא
         </Button>
@@ -162,15 +162,15 @@ const Step1 = ({ onResult }: Step1Props) => {
             }
             elevation={resultsShouldOverflowContainer ? 1 : 0}
           >
-            <RecommendationsContainer
-              recommendations={suggestions}
-              buttons={(recommendation) => (
+            <BusinessesContainer
+              businesses={suggestions}
+              buttons={(business) => (
                 <ContainedPrimaryButton
                   size="small"
                   onClick={() =>
                     onResult({
                       type: Step1ResultType.useExisting,
-                      recommendation,
+                      business,
                     })
                   }
                 >
@@ -187,7 +187,7 @@ const Step1 = ({ onResult }: Step1Props) => {
               onClick={() =>
                 onResult({
                   type: Step1ResultType.createNew,
-                  name,
+                  businessName,
                 })
               }
               fullWidth

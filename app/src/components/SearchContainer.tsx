@@ -11,17 +11,17 @@ import {
   Dialog,
   ContainerProps,
 } from "@material-ui/core";
-import RecommendationView from "./RecommendationView";
+import BusinessView from "./BusinessView";
 import HomeSearchIcon from "../icons/HomeSearchIcon";
 import SearchFilter, { searchFilters } from "../searchFilters";
 import server from "../server";
-import ServerRecommendation from "../types/ServerRecommendation";
+import Business from "../types/Business";
 import {
   PrimaryButton,
   ContainedPrimaryButton,
   DangerButton,
 } from "./StyledButtons";
-import RecommendationsContainer from "./RecommendationsContainer";
+import BusinessesContainer from "./BusinessesContainer";
 
 const useStyles = makeStyles((theme) => ({
   fieldsContainer: {
@@ -82,12 +82,12 @@ function SearchContainer(props: ContainerProps) {
     selectedFilterApplicatorsReducer,
     new Map<string, string[]>()
   );
-  const [results, setResults] = useState<ServerRecommendation[] | null>(null);
+  const [results, setResults] = useState<Business[] | null>(null);
 
   const [
     focusedRecommendation,
     setFocusedRecommendation,
-  ] = useState<ServerRecommendation | null>(null);
+  ] = useState<Business | null>(null);
   const [
     isFocusedRecommendationDialogOpen,
     setIsFocusedRecommendationDialogOpen,
@@ -100,7 +100,7 @@ function SearchContainer(props: ContainerProps) {
     };
 
     server
-      .fetchRecommendations(searchQuery)
+      .fetchBusinesses(searchQuery)
       .then(setResults)
       .catch(console.error);
   };
@@ -161,8 +161,8 @@ function SearchContainer(props: ContainerProps) {
         </CardContent>
       </Card>
       {results !== null && (
-        <RecommendationsContainer
-          recommendations={results}
+        <BusinessesContainer
+          businesses={results}
           buttons={(recommendation) => (
             <Fragment>
               <PrimaryButton
@@ -190,8 +190,8 @@ function SearchContainer(props: ContainerProps) {
       >
         <Box p={1} pb={2}>
           {focusedRecommendation && (
-            <RecommendationView
-              recommendation={focusedRecommendation}
+            <BusinessView
+              business={focusedRecommendation}
               detailed
               buttons={
                 <Fragment>

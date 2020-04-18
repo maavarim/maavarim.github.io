@@ -8,7 +8,7 @@ export const moveElementUp = <T>(array: T[], index: number) =>
         ...array.slice(0, index - 1),
         array[index],
         array[index - 1],
-        ...array.slice(index + 1)
+        ...array.slice(index + 1),
       ];
 
 export const iterableSome = <T>(
@@ -24,3 +24,6 @@ export const iterableSome = <T>(
 };
 
 export const formatForDisplaying = (array: string[]) => array.join(" · ");
+
+export const average = (array: number[]) =>
+  array.reduce((prev, curr) => prev + curr) / array.length;

@@ -1,9 +1,9 @@
 import { Config } from "../utils/Config";
 import { fetchAuthenticated } from "../firebase/auth";
-import Recommendation from "../types/Recommendation";
-import ServerRecommendation from "../types/ServerRecommendation";
+import Business from "../types/Business";
+import { Proposal } from "../types/Proposal";
 
-import fetchRecommendationsMockData from "./mock-data/fetchRecommendations";
+import fetchBusinessesMockData from "./mock-data/fetchBusinesses";
 
 const apiBase = Config.debug
   ? "http://localhost:5000/"
@@ -11,12 +11,12 @@ const apiBase = Config.debug
 
 const get = (path: string, params: any = {}, auth: boolean = true) => {
   const url = new URL(apiBase + path);
-  Object.keys(params).forEach(key =>
+  Object.keys(params).forEach((key) =>
     url.searchParams.append(key, JSON.stringify(params[key]))
   );
 
   return (auth ? fetchAuthenticated : fetch)(url.href, {
-    method: "get"
+    method: "get",
   });
 };
 
@@ -25,33 +25,29 @@ const post = (path: string, body: any = {}, auth: boolean = true) =>
     method: "post",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   });
 
-async function createRecommendation(
-  recommendation: Recommendation
-): Promise<void> {
-  return post("recommendation/", recommendation).then(({ status }) => {
+async function propose(proposal: Proposal): Promise<void> {
+  return post("propose/", proposal).then(({ status }) => {
     if (status !== 200) throw new Error();
   });
 }
 
-async function fetchRecommendations(
-  query: any
-): Promise<ServerRecommendation[]> {
-  if (fetchRecommendationsMockData) {
-    return fetchRecommendationsMockData(query);
+async function fetchBusinesses(query: any): Promise<Business[]> {
+  if (fetchBusinessesMockData) {
+    return fetchBusinessesMockData(query);
   }
 
   const jsonRes = await (await get("recommendation/", query, false)).json();
-  return jsonRes["recommendations"] as ServerRecommendation[];
+  return jsonRes["recommendations"] as Business[];
 }
 
 const server = {
-  createRecommendation,
-  fetchRecommendations
+  propose,
+  fetchBusinesses,
 };
 
 export default server;

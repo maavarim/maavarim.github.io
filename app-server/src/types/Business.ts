@@ -1,11 +1,8 @@
-export default interface Recommendation {
-  authorEmail: string;
-  name: string;
-  rating: number;
+import Review from "./Review";
+
+export interface BusinessInfo {
   phone?: string;
   location?: string;
-  additionalInfo?: string;
-  createdAt?: Date;
 
   area: string[];
   expertise: string[];
@@ -13,6 +10,12 @@ export default interface Recommendation {
   healthCare: string[];
   language: string[];
   profession: string[];
-
-  accepted: boolean;
 }
+
+interface Business {
+  name: string;
+  info: BusinessInfo;
+  reviews?: Review[];
+}
+
+export default Business;

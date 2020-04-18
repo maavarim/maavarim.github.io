@@ -1,3 +1,0 @@
-interface UserInfo {
-  email: string;
-}

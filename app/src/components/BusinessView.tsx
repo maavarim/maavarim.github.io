@@ -9,7 +9,7 @@ import {
   BookTwoTone,
 } from "@material-ui/icons";
 import Rating from "./Rating";
-import ServerRecommendation from "../types/ServerRecommendation";
+import Business, { averageRating } from "../types/Business";
 import { formatForDisplaying } from "../utils/Array";
 
 const useStyles = makeStyles((theme) => ({
@@ -49,19 +49,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface RecommendationViewProps {
-  recommendation: ServerRecommendation;
+interface BusinessViewProps {
+  business: Business;
   buttons?: JSX.Element;
   detailed?: boolean;
   rating?: boolean;
 }
 
-const RecommendationView = ({
-  recommendation,
+const BusinessView = ({
+  business,
   buttons,
   detailed = false,
   rating = true,
-}: RecommendationViewProps) => {
+}: BusinessViewProps) => {
   const classes = useStyles();
 
   return (
@@ -69,12 +69,12 @@ const RecommendationView = ({
       <Box className={classes.container} p={2} pb={1}>
         <Box display="flex" alignItems="center" flexWrap="wrap" mb={1}>
           <Typography variant="h6" className={classes.name}>
-            {recommendation.name}
+            {business.name}
           </Typography>
           {rating && (
             <Rating
               className={classes.rating}
-              value={recommendation.rating}
+              value={averageRating(business)}
               readOnly
             />
           )}
@@ -82,26 +82,32 @@ const RecommendationView = ({
 
         <Box className={classes.details}>
           <LabelTwoTone />
-          <Box>{formatForDisplaying(recommendation.profession)}</Box>
+          <Box title="מקצוע">
+            {formatForDisplaying(business.info.profession)}
+          </Box>
 
           {detailed && (
             <Fragment>
               <BookTwoTone />
-              <Box>{formatForDisplaying(recommendation.expertise)}</Box>
+              <Box title="התמחות">
+                {formatForDisplaying(business.info.expertise)}
+              </Box>
             </Fragment>
           )}
 
           <PlaceTwoTone />
-          <Box>{recommendation.location}</Box>
+          <Box title="מיקום">{business.info.location}</Box>
 
           <CallTwoTone />
-          <Box>{recommendation.phone}</Box>
+          <Box title="מספר טלפון">{business.info.phone}</Box>
 
           <TranslateTwoTone />
-          <Box>{formatForDisplaying(recommendation.language)}</Box>
+          <Box title="שפה">{formatForDisplaying(business.info.language)}</Box>
 
           <SpaTwoTone />
-          <Box>{formatForDisplaying(recommendation.healthCare)}</Box>
+          <Box title="קופת חולים">
+            {formatForDisplaying(business.info.healthCare)}
+          </Box>
         </Box>
       </Box>
       {buttons && <Box className={classes.buttonsConatiner}>{buttons}</Box>}
@@ -109,4 +115,4 @@ const RecommendationView = ({
   );
 };
 
-export default RecommendationView;
+export default BusinessView;
